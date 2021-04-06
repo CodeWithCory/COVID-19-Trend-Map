@@ -21,7 +21,7 @@ export class AboutComponent implements OnInit {
 
     /* Note page view */
     const url = '/api/note/page';
-    const body = { label: "about" };
+    const body = { label: 'about' };
     const viewStatusReportObservable = this.http.post(url, body).subscribe((res: any) => {
       viewStatusReportObservable.unsubscribe();
     });
