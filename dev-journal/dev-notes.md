@@ -8,11 +8,11 @@ Follow these steps to get the app up-and-running after a fresh clone
 1. `npm ci` Installs dependencies exactly according to the `package-lock.json`
 2. Update the gitignored `.env` file with the necessary config vars/keys:
    - `heroku config:get DATABASE_URL -s  >> .env`
-3. `heroku local` serves Angular's build folder (`dist/`) locally with Heroku connections (config vars, database, etc)
+3. `ng build --watch` creates an app build in the `dist/` folder
+   - After source code changes simply refresh the page to see updates (thanks to the `--watch` flag)
+4. `heroku local` serves Angular's build folder (`dist/`) locally with Heroku connections (config vars, database, etc)
    - Useful for full-stack testing
    - The current app build is available on localhost port 5000 by default: http://localhost:5000
-4. `ng build --watch` creates an app build in the `dist/` folder
-   - After source code changes simply refresh the page to see updates (thanks to the `--watch` flag)
 
 Other commands:
 

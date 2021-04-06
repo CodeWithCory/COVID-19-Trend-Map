@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "node index.js",
+    "start": "node --max_old_space_size=2560 index.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
