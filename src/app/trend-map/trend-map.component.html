@@ -67,7 +67,7 @@
     <h3>{{panelContent.title}}</h3> <!-- County or State -->
     <h6>{{panelContent.subtitle}}</h6> <!-- State or blank -->
 
-    <div>
+    <div *ngIf="isPanelContentValid({title: panelContent.title, subtitle: panelContent.subtitle, timeStop: currentTimeStop.num})">
       <p *ngIf="weekDefinitions"><em>{{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}} {{currentTimeStop.num === latestTimeStop.num ? '(Latest)' : '(Historic)'}}</em></p>
       <!-- <p>{{panelContent.date}}20</p> -->
 
@@ -171,7 +171,7 @@
       &nbsp;
       <a href="{{window.location.origin}}?fips={{panelContent.fips}}&name={{replaceSpaces(panelContent.title, '+')}}" target="_blank"><button class="btn btn-secondary">Open (New Tab)</button></a>
     </div>
-    <!-- <div *ngIf="panelContent.subtitle == 'Utah'"><em>Utah data only available at the state level right now, update coming January 2021</em></div> -->
+    <div *ngIf="!isPanelContentValid({title: panelContent.title, subtitle: panelContent.subtitle, timeStop: currentTimeStop.num})"><em>Information is only available at the state level for this place and time.</em></div>
   </div>
 
   <!-- <div class="placeholder-box" style="z-index: 1000; position: absolute; left: 30%; bottom: 20px; width: 40%; height: 60px;">
@@ -199,7 +199,7 @@
           <a ngbDropdownItem class="dropdown-layer-label">Select a COVID-19 metric:</a>
           <a ngbDropdownItem (click)="changeLayerSelection('ccr')" class="dropdown-layer-option"><div class="fa-inline"><fa-icon [icon]="faVirus"></fa-icon></div> County Case Rate</a>
           <a ngbDropdownItem (click)="changeLayerSelection('cca')" class="dropdown-layer-option"><div class="fa-inline"><fa-icon [icon]="faChartLine"></fa-icon></div> County Case Acceleration</a>
-          <a ngbDropdownItem (click)="changeLayerSelection('cr')" class="dropdown-layer-option"><div class="fa-inline"><fa-icon [icon]="faShieldAlt"></fa-icon></div> County Recovery</a>
+          <!-- <a ngbDropdownItem (click)="changeLayerSelection('cr')" class="dropdown-layer-option"><div class="fa-inline"><fa-icon [icon]="faShieldAlt"></fa-icon></div> County Recovery</a> -->
           <!-- <a ngbDropdownItem (click)="changeLayerSelection('cdr')" class="dropdown-layer-option"><div class="fa-inline"><fa-icon [icon]="faVirus"></fa-icon></div> County Death Rate</a> -->
           <!-- <a disabled ngbDropdownItem (click)="changeLayerSelection('scr')" class="disabled dropdown-layer-option">State Case Rate</a> -->
           <!-- <a disabled ngbDropdownItem (click)="changeLayerSelection('sca')" class="disabled dropdown-layer-option">State Case Acceleration</a> -->
