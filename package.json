@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "heroku-postbuild": "ng build --configuration=production",
-    "deploy": "git add . && git stash && git push && git checkout live && git pull origin main && git push && git checkout main && git stash pop"
+    "deploy": "git add --all && git stash && git push && git checkout live && git pull origin main && git push && git checkout main && git stash pop"
   },
   "private": true,
   "dependencies": {
