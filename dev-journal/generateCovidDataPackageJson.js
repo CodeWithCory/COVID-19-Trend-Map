@@ -1,6 +1,8 @@
 
 const { CronJob, Got, PapaParse, PapaUnparse, fs, path, productionMode, queryPrimaryDatabase } = getDependencies();
 
+const manualWeekLimit = 100; // max is 160ish
+
 manuallyGenerateCovidDataPackage();
 
 async function manuallyGenerateCovidDataPackage() {
@@ -202,6 +204,8 @@ async function generateCovidDataPackage_dev(source) {
     let filePath_deaths = path.join(__dirname, './../../../code_external/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv');
     let data_deaths = fs.readFileSync(filePath_deaths, "utf8");
     let countyDeathsCsvContent = data_deaths;
+    // console.log('typeof countyDeathsCsvContent', typeof countyDeathsCsvContent);
+    // console.log('countyDeathsCsvContent', countyDeathsCsvContent);
 
     /* Get County CSV */
     let filePath_cases = path.join(__dirname, './../../../code_external/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv');
@@ -254,13 +258,18 @@ async function generateCovidDataPackage_dev(source) {
  * @param {string} csvContent - Raw string CSV content from JHU
  * @param {string} dissolveField - The field to dissolve (typically Province_State or Country_Region)
  */
-function dissolveCsv(csvContent, dissolveField) {
+function dissolveCsv(csvContent, dissolveField, weekLimit = manualWeekLimit) {
     const csv2dArray = PapaParse(csvContent).data;
     headerRow = csv2dArray[0];
     dissolveIndex = headerRow.indexOf(dissolveField);
     dataRows = {};
 
     /* Each Row */
+    // const dayLimit = weekLimit ? ((weekLimit * 7) + 1): csv2dArray.length;
+    // console.log('((weekLimit * 7) + 1)', ((weekLimit * 7) + 1));
+    // console.log('csv2dArray.length', csv2dArray.length);
+
+
     for (let i = 1; i < csv2dArray.length; i++) {
         currentRow = csv2dArray[i];
         groupName = currentRow[dissolveIndex];
@@ -273,7 +282,8 @@ function dissolveCsv(csvContent, dissolveField) {
                 const currentHeader = headerRow[ii];
                 const headerSlashes = currentHeader.match(/\//g);
                 const headerLength = currentHeader.length;
-                if ((headerLength === 6 || headerLength === 7 || headerLength === 8) && headerSlashes && headerSlashes.length == 2) {
+                const cellIsCovidData = (headerLength === 6 || headerLength === 7 || headerLength === 8) && headerSlashes && headerSlashes.length == 2;
+                if (cellIsCovidData) {
                     /* If this cell is COVID data that we want to aggregate */
                     dataRows[groupName][ii] = parseInt(dataRows[groupName][ii], 10) + parseInt(cellValue, 10);
                 } else {

@@ -188,10 +188,12 @@ export class TrendMapComponent implements OnInit {
   }
 
   getData() {
-    const url = '/api/getData';
-    const body = {};
-    const getDataObservable = this.http.post(url, body).subscribe((response: any) => {
-      // console.log("Data Package:\n", response);
+    const url = './assets/covid-data-2023-04-09.json';
+    const getDataObservable = this.http.get(url).subscribe((response: any) => {
+
+      console.log('Data Source:', response.source);
+      console.log("Data Package:\n", response);
+      // Good FIPS test-cases to log: 31041, 08009
 
       this.weekDefinitions = response.weekDefinitions;
 
@@ -211,11 +213,6 @@ export class TrendMapComponent implements OnInit {
         name: this.latestTimeStop.name,
         num: this.latestTimeStop.num
       };
-
-      /* Useful for debugging */
-      console.log('Data Source:', response.source);
-      // console.log("Data Package:", response);
-      // Good FIPS test-cases to log: 31041, 08009
 
       this.initMapData(response.county.geoJson, response.state.geoJson, response.national.geoJson);
 
@@ -353,7 +350,6 @@ export class TrendMapComponent implements OnInit {
           }, 250);
         });
       } else if (this.stateNameList.includes(secondLevelLocation)) {
-        // console.log("US State Detected: ", secondLevelLocation);
         // this.map.flyToBounds(place.location.bounds);
         matchedLayer = this.getLayerMatch(this.stateGeoJSON, place.location.x, place.location.y);
         this.map.flyToBounds(matchedLayer.getBounds().pad(0.5), { duration: 0.6 });
@@ -368,9 +364,6 @@ export class TrendMapComponent implements OnInit {
         });
       } else {
         const currentView = this.map.getBounds();
-        // console.log("locationInfo", locationInfo);
-        // console.log("topLevelLocation", topLevelLocation);
-        // console.log("secondLevelLocation", secondLevelLocation);
         alert('Location not found or unavailable in the U.S.');
         setTimeout(() => {
           this.map.fitBounds(currentView);
@@ -722,6 +715,7 @@ export class TrendMapComponent implements OnInit {
 
   }
 
+  /* TODO: Average Nebraska for better map display */
   updateMapDisplay(attribute = undefined) {
 
     if (attribute !== undefined) {
@@ -764,12 +758,14 @@ export class TrendMapComponent implements OnInit {
 
       /* Update popup */
       const countyInfo = this.countyCaseLookup[`${layer.feature.properties.FIPS}`];
+      // const stateInfo = this.stateCaseLookup[`${layer.feature.properties.FIPS}`];
       const countyName = countyInfo.name;
       const countyData = countyInfo.data[this.currentTimeStop.num];
+      // const stateData = stateInfo.data[this.currentTimeStop.num];
       const stateName = this.stateFipsLookup[layer.feature.properties.FIPS.substr(0, 2)].name;
-      const isContentValid = this.isPanelContentValid({subtitle: stateName, timeStop: this.currentTimeStop.num});
+      const isInvalidNebraska = this.isPanelContentValid({subtitle: stateName, timeStop: this.currentTimeStop.num});
       const attributeContent = 
-        isContentValid ? `${attributeLabel}: <strong>${this.styleNum(countyData[rawCountId])}</strong> ${normalizedId ? '(' + this.styleNum(countyData[normalizedId]) + ' per 100k)' : ''}`
+        isInvalidNebraska ? `${attributeLabel}: <strong>${this.styleNum(countyData[rawCountId])}</strong> ${normalizedId ? '(' + this.styleNum(countyData[normalizedId]) + ' per 100k)' : ''}`
         : "<em>Information is only available at the state level for this place and time.</em>"
       ;
 
@@ -780,7 +776,7 @@ export class TrendMapComponent implements OnInit {
       + attributeContent
       + `<p class="status-report-label"><em>See Status Report:</em></p>
       <div class="popup-status-report-btn-wrapper">
-        <button ${isContentValid ? '' : 'disabled'} type="button" popup-fips="${layer.feature.properties.FIPS}" class="popup-status-report-btn-local btn btn-secondary btn-sm btn-light">Local</button>
+        <button ${isInvalidNebraska ? '' : 'disabled'} type="button" popup-fips="${layer.feature.properties.FIPS}" class="popup-status-report-btn-local btn btn-secondary btn-sm btn-light">Local</button>
         <button type="button" popup-fips="${layer.feature.properties.FIPS}" class="popup-status-report-btn-state btn btn-secondary btn-sm btn-light">State</button>
       <div>
       `;
@@ -789,8 +785,11 @@ export class TrendMapComponent implements OnInit {
       // <span class="popup-fips-label">[<span class="popup-fips">${layer.feature.properties.FIPS}</span>]</span>
 
       /* Update color */
-      if (!isContentValid) {
-        layer.setStyle({ fillColor: "hsl(0, 0%, 85%)" });
+      if (!isInvalidNebraska) {
+        const nebraskaStateData = this.stateCaseLookup['31'].data[this.currentTimeStop.num];
+        const currentTimeStopStateNormalized = nebraskaStateData[normalizedId];
+        layer.setStyle(getStyle(currentTimeStopStateNormalized));
+        // layer.setStyle({ fillColor: "hsl(0, 0%, 85%)" });
       } else if (attribute === 5) {
         layer.setStyle(getStyle(countyData[rawCountId], countyData[cumulativeId]));
       } else {
@@ -862,7 +861,6 @@ export class TrendMapComponent implements OnInit {
     const newTimeStop = targetTimeStop > this.latestTimeStop.num ? this.currentTimeStop.num
       : targetTimeStop < 0 ? this.currentTimeStop.num
       : targetTimeStop;
-    // console.log("target, new", targetTimeStop, newTimeStop);
     this.currentTimeStop = { name: `t${newTimeStop}`, num: newTimeStop };
     this.timeSliderChange();
   }

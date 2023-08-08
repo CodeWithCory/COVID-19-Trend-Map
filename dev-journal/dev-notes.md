@@ -48,11 +48,8 @@ County map layer with size reduction (7.8 MB > 2.2 MB) process:
 
 ### 2023 Archival
 
-A 2023 data package has been downloaded to `covid-data-2023-04-09.json`, need to host a static archival build somewhere like GitHub Pages.
-
-Will need to add some kind of "archived" banner and maybe change some wording.
-
-I may also want to back up the data a bit since I probably don't need all the way up through 2023.
+- 2023-08-08 Currently working on generating a new, smaller, data package from `covid-data-2023-04-09.json`. Tinkering with `reduceCovidDataPackage.js`, but probably a better strategy is to hack in a `manualWeekLimit` in the `generateCovidDataPackageJson.js`.
+- 2023-04-15 A 2023 data package has been downloaded to `covid-data-2023-04-09.json`, need to host a static archival build somewhere like GitHub Pages. Will need to add some kind of "archived" banner and maybe change some wording. I may also want to back up the data a bit since I probably don't need all the way up through 2023.
 
 ### Maintenance
 
