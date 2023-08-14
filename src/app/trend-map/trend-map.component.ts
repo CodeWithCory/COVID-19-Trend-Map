@@ -188,7 +188,7 @@ export class TrendMapComponent implements OnInit {
   }
 
   getData() {
-    const url = './assets/covid-data-2023-04-09.json';
+    const url = './assets/covid-data-2022-03-16.json';
     const getDataObservable = this.http.get(url).subscribe((response: any) => {
 
       console.log('Data Source:', response.source);

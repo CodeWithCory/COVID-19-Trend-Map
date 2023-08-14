@@ -1,10 +1,23 @@
 
 const { CronJob, Got, PapaParse, PapaUnparse, fs, path, productionMode, queryPrimaryDatabase } = getDependencies();
 
-const manualWeekLimit = 100; // max is 160ish
+const RELATIVE_PATH_TO_JHU_REPO = './../../../codeexternal/COVID-19/';
 
 manuallyGenerateCovidDataPackage();
 
+/**
+ * This script creates an aggregated COVID-19 data package .json file ready for
+ * consumption by the COVID-19-Watch app. This script was copied and modified
+ * from the server code for COVID-19-Watch so that a data package can be
+ * created locally.
+ * 
+ * This script generated the covid-data-2022-03-16.json file in src/assets/
+ * 
+ * To run this script:
+ * 1) Clone JHU's COVID data repo: https://github.com/CSSEGISandData/COVID-19/tree/master
+ * 2) Update the RELATIVE_PATH_TO_JHU_REPO variable above
+ * 3 `node generateCovidDataPackageJson.js`
+ */
 async function manuallyGenerateCovidDataPackage() {
     const result = await generateCovidDataPackage_dev();
     console.log('typeof result', typeof result);
@@ -201,14 +214,14 @@ async function generateCovidDataPackage(source = "unknown") {
 async function generateCovidDataPackage_dev(source) {
 
     /* Get County Deaths CSV */
-    let filePath_deaths = path.join(__dirname, './../../../code_external/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv');
+    let filePath_deaths = path.join(__dirname, RELATIVE_PATH_TO_JHU_REPO + 'csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv');
     let data_deaths = fs.readFileSync(filePath_deaths, "utf8");
     let countyDeathsCsvContent = data_deaths;
     // console.log('typeof countyDeathsCsvContent', typeof countyDeathsCsvContent);
     // console.log('countyDeathsCsvContent', countyDeathsCsvContent);
 
     /* Get County CSV */
-    let filePath_cases = path.join(__dirname, './../../../code_external/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv');
+    let filePath_cases = path.join(__dirname, RELATIVE_PATH_TO_JHU_REPO + 'csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv');
     let data = fs.readFileSync(filePath_cases, "utf8");
     let countyCsvContent = data;
 
@@ -263,12 +276,6 @@ function dissolveCsv(csvContent, dissolveField, weekLimit = manualWeekLimit) {
     headerRow = csv2dArray[0];
     dissolveIndex = headerRow.indexOf(dissolveField);
     dataRows = {};
-
-    /* Each Row */
-    // const dayLimit = weekLimit ? ((weekLimit * 7) + 1): csv2dArray.length;
-    // console.log('((weekLimit * 7) + 1)', ((weekLimit * 7) + 1));
-    // console.log('csv2dArray.length', csv2dArray.length);
-
 
     for (let i = 1; i < csv2dArray.length; i++) {
         currentRow = csv2dArray[i];
