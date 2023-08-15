@@ -5,7 +5,9 @@ import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
   { path: 'about', component: AboutComponent },
-  { path: '', component: TrendMapComponent },
+  /* Temporary routing fix until archival update can be made */
+  { path: '', redirectTo: '/about', pathMatch: 'full' },
+  // { path: '', component: TrendMapComponent },
 ];
 
 const routerOptions: ExtraOptions = {
