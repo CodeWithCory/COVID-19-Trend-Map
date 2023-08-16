@@ -1,16 +1,22 @@
 
 # Development Notes: COVID-19 Trend Map
 
+## Setup
+
+1. `npm i` install dependencies
+2. `npm install -g heroku` install the Heroku CLI
+   1. `heroku login`
+   2. `heroku git:remote -a covid-19-watch` Sets git remote `heroku` and allows other heroku commands to know which heroku app to work with
+   3. `heroku config:get DATABASE_URL -s >> .env` Update the gitignored `.env` file with the necessary config vars/keys
+
 ## Continuous Development
 
 Follow these steps to get the app up-and-running after a fresh clone
 
 1. `npm ci` Installs dependencies exactly according to the `package-lock.json`
-2. Update the gitignored `.env` file with the necessary config vars/keys:
-   - `heroku config:get DATABASE_URL -s  >> .env`
-3. `ng build --watch` creates an app build in the `dist/` folder
+2. `ng build --watch` creates an app build in the `dist/` folder
    - After source code changes simply refresh the page to see updates (thanks to the `--watch` flag)
-4. `heroku local` serves Angular's build folder (`dist/`) locally with Heroku connections (config vars, database, etc)
+3. `heroku local` serves Angular's build folder (`dist/`) locally with Heroku connections (config vars, database, etc)
    - Useful for full-stack testing
    - The current app build is available on localhost port 5000 by default: http://localhost:5000
 
@@ -39,6 +45,12 @@ County map layer with size reduction (7.8 MB > 2.2 MB) process:
 - [Florida Dashboard](https://floridacovidaction.com)
 
 ## Timeline / TO DO
+
+### 2023 Archival
+
+- [ ] 2023-08-13 Next steps: Update app to always use the "historical" verbiage on the "latest" time-stop. Update the About page language to reflect the updates, i.e. that it used to update daily but doesn't anymore, current version is archival, etc.
+- [x] 2023-08-08 Generate smaller COVID data package for archival version of app.
+- 2023-04-15 A 2023 data package has been downloaded to `covid-data-2023-04-09.json`, need to host a static archival build somewhere like GitHub Pages. Will need to add some kind of "archived" banner and maybe change some wording. I may also want to back up the data a bit since I probably don't need all the way up through 2023.
 
 ### Maintenance
 
@@ -122,7 +134,7 @@ To Do:
 
 - **Week 9** (8/10 - 8/16)
   - [x] [Deliverable] Write & deliver executive report
-  - [ ] Socialize & advertize the application publicly
+  - [x] Socialize & advertize the application publicly
 
 - **Additional Tasks (scope creep) Week 8**
   - [x] Teach Diego to differentiate "zero" (`0`) values between "has never had a new case", "back to no new cases", and the magnitude of "back to no new cases" (e.g. "no new cases in x weeks")

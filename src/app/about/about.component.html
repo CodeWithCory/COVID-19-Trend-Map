@@ -9,8 +9,8 @@
         <!-- <p><a href="/" class="text-link strong">COVID-19-Watch</a> is a public online tool to provide direct access to local, easy-to-understand COVID-19 data.</p>
         <p><a href="/" class="text-link strong">COVID-19-Watch</a> is a public online tool to provide up-to-date, easy-to-understand COVID-19 progression insights.</p>
         <p><a href="/" class="text-link strong">COVID-19-Watch</a> is a public online tool to help keep watch of COVID-19's progression in the United States.</p> -->
-        <p><a href="/" class="text-link strong">COVID-19-Watch</a> is a public online tool to monitor COVID-19's progression in the United States.</p>
-        <p>The data is updated daily and anyone can share and bookmark local, state, or national COVID-19 Status Reports of interest with their community.</p>
+        <p><a href="/" class="text-link strong">COVID-19-Watch</a> is a public online tool to view historical progression of COVID-19 in the United States.</p>
+        <p>Data is available from February 2020 to March 2022, the data was updated daily during this time. Today, anyone can view, share, and bookmark COVID-19 Status Reports at the local, state, and national levels.</p>
         <br>
 
         <p><strong>Key Features:</strong></p>
@@ -18,7 +18,7 @@
           <li><a href="/about#find-and-share" class="text-link strong" (click)="scrollToFragment('find-and-share')">Find and share</a> - Quickly search anywhere in the nation for COVID-19 Status Reports</li>
           <li><a href="/about#local-state-national" class="text-link strong">Local, state, and national</a> - Explore data and trends at local, state, and national levels</li>
           <li><a href="/about#change-over-time" class="text-link strong">Change over time</a> - Watch change-over-time animation in the map and graph</li>
-          <li><a href="/about#up-to-date-data" class="text-link strong">Up-to-date data</a> - Get the latest data automatically updated daily from Johns Hopkins University</li>
+          <li><a href="/about#up-to-date-data" class="text-link strong">Up-to-date data</a> - While COVID-19-Watch.com was active, users could see the latest data automatically updated daily from Johns Hopkins University</li>
         </ul>
 
       <!-- </div>
@@ -52,7 +52,7 @@
       </div>
       <div class="col-12 col-sm-6 col-md-4 display-image">
         <a href="/?fips=51059&name=Fairfax+County"><img src="assets/img/app-use.jpg" class="img-fluid"></a>
-        <p>Local Status Reports updated daily</p>
+        <p>Local Status Reports</p>
       </div>
       <div class="col-6 col-md-2 display-image">
         <a href="/"><img src="assets/img/app-home-mobile.jpg" class="img-fluid"></a>
@@ -134,13 +134,14 @@
     <div id="up-to-date-data" class="row">
       <div class="col-sm">
         <h2>Up-to-Date Data</h2>
-        <p>All information is calculated daily from the <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank" class="text-link">COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a>. Read more about JHU CSSE's data process in their <a href="https://github.com/CSSEGISandData/COVID-19/blob/master/README.md" target="_target" class="text-link">README</a>. This Johns Hopkins data service is <a href="https://ourworldindata.org/covid-sources-comparison" target="_blank" class="text-link">highly regarded as one of the best sources of COVID-19 data</a>.</p>
+        <p>All information is calculated from the <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank" class="text-link">COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a>. Read more about JHU CSSE's data process in their <a href="https://github.com/CSSEGISandData/COVID-19/blob/master/README.md" target="_target" class="text-link">README</a>. This Johns Hopkins data service is <a href="https://ourworldindata.org/covid-sources-comparison" target="_blank" class="text-link">highly regarded as one of the best sources of COVID-19 data</a>.</p>
+        <p>Data is available from February 2020 to March 2022, the data was updated daily during this time.</p>
         <p>Data lifecycle:</p>
         <ol>
-          <li>Raw COVID-19 data are automatically pulled from Johns Hopkins every morning around 3 a.m. by <a href="https://github.com/CoryLR/COVID-19-Trend-Map/blob/main/server/Diego-DataBroker.bot.js" target="_blank" class="text-link">Diego the Data Broker</a>, a web robot developed to support COVID-19-Watch.</li>
+          <li>Raw COVID-19 data was automatically pulled from Johns Hopkins every morning around 3 a.m. by <a href="https://github.com/CoryLR/COVID-19-Trend-Map/blob/main/server/Diego-DataBroker.bot.js" target="_blank" class="text-link">Diego the Data Broker</a>, a web robot developed to support COVID-19-Watch.</li>
           <li>Diego calculates metrics such as case rate and acceleration for every county, state, and the nation for every week since the data begins</li>
           <li>This data is added to a Data Package alongside county, state, and national GeoJSON map files and added to the database</li>
-          <li>When someone visits COVID-19-Watch online, Diego takes the morning's latest Data Package and gives it to the app for display in the map and Status Reports</li>
+          <li>When someone visits COVID-19-Watch online, Diego took the morning's latest Data Package and gave it to the app for display in the map and Status Reports</li>
         </ol>
       </div>
     </div>

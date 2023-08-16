@@ -1,7 +1,9 @@
 
 /* 
   Update the snapshots JSON (bash syntax):
+
     # Open the Database, set it to Output ("\o") and Tuple ("\t"; value only) modes, then get the snapshots
+    touch dev-journal/metrics/all_snapshots.json
     heroku pg:psql
     \o dev-journal/metrics/all_snapshots.json
     \t
@@ -12,6 +14,7 @@
 
     # Run this report on all_snapshots.json
     node dev-journal/metrics/report.js 7
+
 */
 
 const snapshots = require("./all_snapshots.json");
