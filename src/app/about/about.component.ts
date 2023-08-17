@@ -19,12 +19,12 @@ export class AboutComponent implements OnInit {
 
   ngOnInit(): void {
 
-    /* Note page view */
-    const url = '/api/note/page';
-    const body = { label: 'about' };
-    const viewStatusReportObservable = this.http.post(url, body).subscribe((res: any) => {
-      viewStatusReportObservable.unsubscribe();
-    });
+    // /* Note page view */
+    // const url = '/api/note/page';
+    // const body = { label: 'about' };
+    // const viewStatusReportObservable = this.http.post(url, body).subscribe((res: any) => {
+    //   viewStatusReportObservable.unsubscribe();
+    // });
 
     /* Scroll once all images have loaded */
     const images = document.querySelectorAll('img');

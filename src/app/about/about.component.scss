@@ -2,7 +2,10 @@
 .about-container {
   background-color: white;
   width: 100vw;
-  min-height: -webkit-fill-available; // Fix for weird iOS height issues
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  // min-height: -webkit-fill-available; // Fix for weird iOS height issues
 
   li {
     margin-bottom: 5px;

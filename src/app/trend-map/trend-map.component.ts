@@ -191,8 +191,7 @@ export class TrendMapComponent implements OnInit {
     const url = './assets/covid-data-2022-03-16.json';
     const getDataObservable = this.http.get(url).subscribe((response: any) => {
 
-      console.log('Data Source:', response.source);
-      console.log("Data Package:\n", response);
+      console.info("Data Package:\n", response);
       // Good FIPS test-cases to log: 31041, 08009
 
       this.weekDefinitions = response.weekDefinitions;
@@ -285,6 +284,7 @@ export class TrendMapComponent implements OnInit {
       this.lastZoomLevel = this.mapZoomLevel;
     });
 
+    /* @ts-ignore - temporary type fix for incorrect error */
     const geoSearch = new GeoSearch.GeoSearchControl({
       provider: new GeoSearch.OpenStreetMapProvider(),
       style: 'bar',
@@ -422,11 +422,11 @@ export class TrendMapComponent implements OnInit {
       this.closePanel();
       setTimeout(() => {
         this.updatePanel(layer);
-        this.noteStatusReportView(fips, `${this.panelContent.title}${this.panelContent.subtitle.length > 0 ? ', ' + this.panelContent.subtitle : ''}`);
+        // this.noteStatusReportView(fips, `${this.panelContent.title}${this.panelContent.subtitle.length > 0 ? ', ' + this.panelContent.subtitle : ''}`);
       }, 500);
     } else {
       this.updatePanel(layer);
-      this.noteStatusReportView(fips, `${this.panelContent.title}${this.panelContent.subtitle.length > 0 ? ', ' + this.panelContent.subtitle : ''}`);
+      // this.noteStatusReportView(fips, `${this.panelContent.title}${this.panelContent.subtitle.length > 0 ? ', ' + this.panelContent.subtitle : ''}`);
     }
 
   }
@@ -453,8 +453,6 @@ export class TrendMapComponent implements OnInit {
     const deathRate: number = deathsData[1];
     const deathRateNorm: number = deathsData[3];
 
-    const current = this.currentTimeStop.num === this.latestTimeStop.num ? true : false;
-
     this.panelContent.fips = layer.feature.properties.FIPS;
     this.panelContent.title = placeName;
     this.panelContent.subtitle = fips.length === 2 ? 'USA' : fips.length === 1 ? '' : this.stateFipsLookup[fips.substr(0, 2)].name;
@@ -468,11 +466,11 @@ export class TrendMapComponent implements OnInit {
     this.panelContent.deathsRateNorm = this.styleNum(deathRateNorm);
     this.panelContent.date = this.weekDefinitions.lookup[`t${this.latestTimeStop.num + 1}`];
     if (recoveryStreak === 0 && cumulative > 0) {
-      this.panelContent.summary = `${this.panelContent.title} ${current ? 'is reporting' : 'reported '} <strong>${this.panelContent.rate} new cases</strong> of COVID-19 ${current ? 'over the past week' : 'over the selected week'} ${acceleration >= 0 || rate == 0 ? 'and' : 'but'} the number of ${rate > 0 ? '' : 'no'} new cases ${current ? 'is' : 'was'} <strong>${acceleration > 0 ? 'accelerating.' : acceleration == 0 ? 'steady.' : 'decelerating.'}</strong>`;
+      this.panelContent.summary = `${this.panelContent.title} reported <strong>${this.panelContent.rate} new cases</strong> of COVID-19 over the selected week ${acceleration >= 0 || rate == 0 ? 'and' : 'but'} the number of ${rate > 0 ? '' : 'no'} new cases was <strong>${acceleration > 0 ? 'accelerating.' : acceleration == 0 ? 'steady.' : 'decelerating.'}</strong>`;
     } else if (recoveryStreak > 0 && cumulative > 0) {
-      this.panelContent.summary = `${this.panelContent.title} ${current ? 'has' : 'had'} not reported a new case of COVID-19 in ${recoveryStreak} week${recoveryStreak === 1 ? '' : 's'}.`;
+      this.panelContent.summary = `${this.panelContent.title} had not reported a new case of COVID-19 in ${recoveryStreak} week${recoveryStreak === 1 ? '' : 's'}.`;
     } else if (cumulative === 0) {
-      this.panelContent.summary = current ? `${this.panelContent.title} has never reported a case of COVID-19.` : `${this.panelContent.title} had not reported any cases of COVID-19.`;
+      this.panelContent.summary = `${this.panelContent.title} had not reported any cases of COVID-19.`;
     }
 
     if (!this.statusReportChartConfig.lineChartType || layer.feature.properties.FIPS !== this.lastSelectedLayer.feature.properties.FIPS) {
@@ -730,7 +728,7 @@ export class TrendMapComponent implements OnInit {
     const cumulativeId = 0;
     if (attribute === 3) {
       getStyle = this.getRateStyleFunction;
-      attributeLabel = this.currentTimeStop.num == this.latestTimeStop.num ? 'New This Week' : 'New (1 Week) ' + this.weekDefinitions.list[this.currentTimeStop.num];
+      attributeLabel = 'New (1 Week) ' + this.weekDefinitions.list[this.currentTimeStop.num];
       rawCountId = 1;
       normalizedId = 3;
     } else if (attribute === 4) {
@@ -745,7 +743,7 @@ export class TrendMapComponent implements OnInit {
       // normalizedId = 4;
     } else {
       getStyle = this.getRateStyleFunction;
-      attributeLabel = this.currentTimeStop.num == this.latestTimeStop.num ? 'New This Week' : 'New (1 Week) ' + this.weekDefinitions.list[this.currentTimeStop.num];
+      attributeLabel = 'New (1 Week) ' + this.weekDefinitions.list[this.currentTimeStop.num];
       rawCountId = 1;
       normalizedId = 3;
     }
@@ -855,9 +853,6 @@ export class TrendMapComponent implements OnInit {
 
   timeStep(step) {
     const targetTimeStop = this.currentTimeStop.num + step;
-    // const newTimeStop = targetTimeStop > this.latestTimeStop.num ? 0
-    //   : targetTimeStop < 0 ? this.latestTimeStop.num
-    //   : targetTimeStop
     const newTimeStop = targetTimeStop > this.latestTimeStop.num ? this.currentTimeStop.num
       : targetTimeStop < 0 ? this.currentTimeStop.num
       : targetTimeStop;
@@ -1026,13 +1021,13 @@ export class TrendMapComponent implements OnInit {
 
   }
 
-  noteStatusReportView(fips, label) {
-    const url = '/api/note/statusReport';
-    const body = { fips, label };
-    const viewStatusReportObservable = this.http.post(url, body).subscribe((res: any) => {
-      viewStatusReportObservable.unsubscribe();
-    });
-  }
+  // noteStatusReportView(fips, label) {
+  //   const url = '/api/note/statusReport';
+  //   const body = { fips, label };
+  //   const viewStatusReportObservable = this.http.post(url, body).subscribe((res: any) => {
+  //     viewStatusReportObservable.unsubscribe();
+  //   });
+  // }
 
   getStateFipsLookup() {
     return { '01': { name: 'Alabama', abbr: 'AL' }, '02': { name: 'Alaska', abbr: 'AK' }, '03': { name: 'American Samoa', abbr: 'AS' }, '04': { name: 'Arizona', abbr: 'AZ' }, '05': { name: 'Arkansas', abbr: 'AR' }, '06': { name: 'California', abbr: 'CA' }, '07': { name: 'Canal Zone', abbr: 'CZ' }, '08': { name: 'Colorado', abbr: 'CO' }, '09': { name: 'Connecticut', abbr: 'CT' }, 10: { name: 'Delaware', abbr: 'DE' }, 11: { name: 'District of Columbia', abbr: 'DC' }, 12: { name: 'Florida', abbr: 'FL' }, 13: { name: 'Georgia', abbr: 'GA' }, 14: { name: 'Guam', abbr: 'GU' }, 15: { name: 'Hawaii', abbr: 'HI' }, 16: { name: 'Idaho', abbr: 'ID' }, 17: { name: 'Illinois', abbr: 'IL' }, 18: { name: 'Indiana', abbr: 'IN' }, 19: { name: 'Iowa', abbr: 'IA' }, 20: { name: 'Kansas', abbr: 'KS' }, 21: { name: 'Kentucky', abbr: 'KY' }, 22: { name: 'Louisiana', abbr: 'LA' }, 23: { name: 'Maine', abbr: 'ME' }, 24: { name: 'Maryland', abbr: 'MD' }, 25: { name: 'Massachusetts', abbr: 'MA' }, 26: { name: 'Michigan', abbr: 'MI' }, 27: { name: 'Minnesota', abbr: 'MN' }, 28: { name: 'Mississippi', abbr: 'MS' }, 29: { name: 'Missouri', abbr: 'MO' }, 30: { name: 'Montana', abbr: 'MT' }, 31: { name: 'Nebraska', abbr: 'NE' }, 32: { name: 'Nevada', abbr: 'NV' }, 33: { name: 'New Hampshire', abbr: 'NH' }, 34: { name: 'New Jersey', abbr: 'NJ' }, 35: { name: 'New Mexico', abbr: 'NM' }, 36: { name: 'New York', abbr: 'NY' }, 37: { name: 'North Carolina', abbr: 'NC' }, 38: { name: 'North Dakota', abbr: 'ND' }, 39: { name: 'Ohio', abbr: 'OH' }, 40: { name: 'Oklahoma', abbr: 'OK' }, 41: { name: 'Oregon', abbr: 'OR' }, 42: { name: 'Pennsylvania', abbr: 'PA' }, 43: { name: 'Puerto Rico', abbr: 'PR' }, 44: { name: 'Rhode Island', abbr: 'RI' }, 45: { name: 'South Carolina', abbr: 'SC' }, 46: { name: 'South Dakota', abbr: 'SD' }, 47: { name: 'Tennessee', abbr: 'TN' }, 48: { name: 'Texas', abbr: 'TX' }, 49: { name: 'Utah', abbr: 'UT' }, 50: { name: 'Vermont', abbr: 'VT' }, 51: { name: 'Virginia', abbr: 'VA' }, 52: { name: 'Virgin Islands', abbr: 'VI' }, 53: { name: 'Washington', abbr: 'WA' }, 54: { name: 'West Virginia', abbr: 'WV' }, 55: { name: 'Wisconsin', abbr: 'WI' }, 56: { name: 'Wyoming', abbr: 'WY' }, 72: { name: 'Puerto Rico', abbr: 'PR' } };

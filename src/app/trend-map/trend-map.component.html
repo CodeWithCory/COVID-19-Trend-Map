@@ -57,18 +57,18 @@
     <div class="status-report-floating-title"  
     [@ngIfAnimation] *ngIf="infoPanelCloseButton && statusReportElement.scrollTop > 75">
       <span><strong>{{panelContent.title}}</strong>{{panelContent.subtitle ? ", " + panelContent.subtitle : ""}}</span>&nbsp;
-      <div class="floating-sub"><em>{{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}} {{currentTimeStop.num === latestTimeStop.num ? '(Latest)' : '(Historic)'}}</em></div>
+      <div class="floating-sub"><em>{{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}} (Historic)</em></div>
     </div>
 
     <div class="close-panel-background" (click)="closePanel()" *ngIf="infoPanelCloseButton"><fa-icon [icon]="faCircle"></fa-icon></div>
     <div class="close-panel" (click)="closePanel()" *ngIf="infoPanelCloseButton"><fa-icon [icon]="faTimesCircle"></fa-icon></div>
 
-    <div><em>{{currentTimeStop.num === latestTimeStop.num ? '' : 'Historic '}}Status Report for:</em></div>
+    <div><em>Historic Status Report for:</em></div>
     <h3>{{panelContent.title}}</h3> <!-- County or State -->
     <h6>{{panelContent.subtitle}}</h6> <!-- State or blank -->
 
     <div *ngIf="isPanelContentValid({title: panelContent.title, subtitle: panelContent.subtitle, timeStop: currentTimeStop.num})">
-      <p *ngIf="weekDefinitions"><em>{{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}} {{currentTimeStop.num === latestTimeStop.num ? '(Latest)' : '(Historic)'}}</em></p>
+      <p *ngIf="weekDefinitions"><em>{{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}} (Historic)</em></p>
       <!-- <p>{{panelContent.date}}20</p> -->
 
       <div class="panel-separator"></div>
@@ -110,7 +110,7 @@
       </div>
 
       <div *ngIf="initialLoadingDone" class="panel-stats-section">
-        <div class="stat-title">New Cases {{currentTimeStop.num === latestTimeStop.num ? 'This' : 'That'}} Week</div>&nbsp;<fa-icon
+        <div class="stat-title">New Cases That Week</div>&nbsp;<fa-icon
           [icon]="faInfoCircle"
           popoverTitle="New Cases Per Week"
           ngbPopover="Number of new COVID-19 cases over 7 days from {{weekDefinitions.list[currentTimeStop.num-1]}} to {{weekDefinitions.list[currentTimeStop.num]}}"
@@ -140,7 +140,7 @@
 
         <div class="panel-separator"></div>
 
-        <div class="stat-title">Deaths {{currentTimeStop.num === latestTimeStop.num ? 'This' : 'That'}} Week</div> &nbsp;<fa-icon
+        <div class="stat-title">Deaths That Week</div> &nbsp;<fa-icon
           [icon]="faInfoCircle"
           popoverTitle="Deaths Per Week"
           ngbPopover="Number of deaths due to COVID-19 cases over 7 days from {{weekDefinitions.list[currentTimeStop.num-1]}} to {{weekDefinitions.list[currentTimeStop.num]}}"
@@ -229,7 +229,7 @@
     </div>
 
     <div *ngIf="windowWidth < 451 && !infoPanelOpen || windowWidth >= 451" class="temporal-box-title"><span class="fa-inline"><fa-icon [icon]="faHistory"></fa-icon></span>
-      <strong>Time:</strong> {{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}} {{currentTimeStop.num === latestTimeStop.num ? '(Week Avg., Latest)' : '(Week Avg.)'}}
+      <strong>Time:</strong> {{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}} (Week Avg.)
     </div>
     <div *ngIf="windowWidth < 451 && !infoPanelOpen || windowWidth >= 451 && currentTimeStop && currentTimeStop.num != undefined && weekDefinitions.list" class="temporal-box">
       <div class="animation-play-pause-button-wrapper">

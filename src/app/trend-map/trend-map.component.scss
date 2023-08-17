@@ -12,8 +12,8 @@
   $header-height: 50px;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
   min-height: -webkit-fill-available; // Fix for weird iOS height issues
-  overflow-x: hide;
   // position: relative;
   @media (max-width: 450px) {
     position: fixed;
