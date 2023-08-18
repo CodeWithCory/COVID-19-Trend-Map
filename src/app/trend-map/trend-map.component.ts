@@ -1,21 +1,16 @@
-import { Component, ElementRef, OnInit, Renderer2, HostListener, ChangeDetectionStrategy, ApplicationRef, ChangeDetectorRef } from '@angular/core';
-import { Title, Meta } from '@angular/platform-browser';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
-import { trigger, state, style, animate, transition, keyframes, } from '@angular/animations';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import * as L from 'leaflet';
-import * as GeoSearch from 'leaflet-geosearch';
+import { faPlusSquare } from '@fortawesome/free-regular-svg-icons';
+import { faArrowDown, faArrowUp, faBars, faChartLine, faCircle, faExternalLinkAlt, faFileMedicalAlt, faHistory, faInfo, faInfoCircle, faMap, faPause, faPlay, faSearch, faShieldAlt, faShieldVirus, faStepBackward, faStepForward, faTimesCircle, faVirus, faVirusSlash } from '@fortawesome/free-solid-svg-icons';
 import * as leafletPip from '@mapbox/leaflet-pip';
+import { ChartDataSets } from 'chart.js';
+import * as L from 'leaflet';
 import { closestLayer } from 'leaflet-geometryutil';
-import { ChartDataSets, ChartOptions } from 'chart.js';
+import * as GeoSearch from 'leaflet-geosearch';
 import { Color, Label } from 'ng2-charts';
 
-/* Font Awesome Icon imports */
-import { faInfoCircle, faInfo, faFileMedicalAlt, faPlay, faPause, faArrowUp, faArrowDown, faChartLine, faTimesCircle, faCircle, faSearch, faVirus, faVirusSlash, faShieldAlt, faShieldVirus, faBars, faExternalLinkAlt, faHistory, faMap, faStepForward, faStepBackward } from '@fortawesome/free-solid-svg-icons';
-import { faPlusSquare } from '@fortawesome/free-regular-svg-icons';
-
-/* TODO: Contribute to @types/leaflet to fix these types */
 export interface CustomTileLayerOptions extends L.TileLayerOptions {
   ext?: string;
 }
@@ -29,7 +24,6 @@ export interface CustomGeoJSONOptions extends L.GeoJSONOptions {
   selector: 'app-trend-map',
   templateUrl: './trend-map.component.html',
   styleUrls: ['./trend-map.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('panelOpenClosed', getPanelTransitions()),
     trigger('loadingSplash', getLoadingSplashTransition()),
@@ -37,8 +31,6 @@ export interface CustomGeoJSONOptions extends L.GeoJSONOptions {
   ]
 })
 export class TrendMapComponent implements OnInit {
-
-  /* * Component Pseudo-Global Variables * */
 
   /* Font Awesome Icons */
   faArrowDown = faArrowDown;
@@ -122,14 +114,13 @@ export class TrendMapComponent implements OnInit {
   /* Misc */
   window = window;
   windowWidth = 0;
-  console = console;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.windowWidth = event.target.innerWidth;
   }
 
-  constructor(private http: HttpClient, private titleService: Title, private metaService: Meta, private elementRef: ElementRef, private route: ActivatedRoute, renderer: Renderer2, /* private document: Document */ private changeDetector: ChangeDetectorRef) { }
+  constructor(private http: HttpClient, private elementRef: ElementRef, private route: ActivatedRoute, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -139,16 +130,6 @@ export class TrendMapComponent implements OnInit {
         const screenWidth = window.screen.width;
         const innerWidth = window.innerWidth;
         this.windowWidth = screenWidth < innerWidth ? screenWidth : innerWidth;
-
-        // this.titleService.setTitle("COVID-19-Watch");
-
-        // this.metaService.addTags([
-        //   // { name: 'keywords', content: 'COVID-19, Coronavirus, Trend, JHU, Johns Hopkins' },
-        //   // { name: 'description', content: 'See COVID-19 trends where you live.' },
-        //   // {name: 'robots', content: 'index, follow'},
-        //   // { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0' }
-        // ]);
-
         this.map = this.initializeMap();
         this.getData();
 
@@ -172,7 +153,6 @@ export class TrendMapComponent implements OnInit {
   actOnUrlScheme() {
     this.route.queryParams
       .subscribe(params => {
-        // console.log("URL params: ", params); // e.g. { fips: "51059" }
         if (params.fips) {
           const selectedLayer = params.fips.length === 2 ? this.stateLayerLookup[params.fips] : params.fips.length === 1 ? this.nationalLayerLookup[params.fips] : this.countyLayerLookup[params.fips];
           if (selectedLayer) {
@@ -208,9 +188,11 @@ export class TrendMapComponent implements OnInit {
         name: Object.keys(this.weekDefinitions.lookup).slice(-1)[0],
         num: this.weekDefinitions.list.length - 1
       };
+
+      const startingTimeStopNum = 74;
       this.currentTimeStop = {
-        name: this.latestTimeStop.name,
-        num: this.latestTimeStop.num
+        name: 't' + startingTimeStopNum,
+        num: startingTimeStopNum
       };
 
       this.initMapData(response.county.geoJson, response.state.geoJson, response.national.geoJson);
@@ -245,7 +227,6 @@ export class TrendMapComponent implements OnInit {
     map.attributionControl.addAttribution(`<a href="/about#up-to-date-data" target="_blank">Data Source: Johns Hopkins<span class="attribution-mobile-hide"> CSSE</span></a> | <a href="/about#disclaimer" target="_blank">Disclaimer</a><span class="attribution-mobile-hide"> | <a href="/about#development-author" target="_blank">Author: Cory Leigh Rahman</a></span>`);
 
     const Stamen_TonerHybrid_Options: CustomTileLayerOptions = {
-      // attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       subdomains: 'abcd',
       minZoom: 0,
       maxZoom: 20,
@@ -284,7 +265,7 @@ export class TrendMapComponent implements OnInit {
       this.lastZoomLevel = this.mapZoomLevel;
     });
 
-    /* @ts-ignore - temporary type fix for incorrect error */
+    /* @ts-ignore - fix for incorrect error */
     const geoSearch = new GeoSearch.GeoSearchControl({
       provider: new GeoSearch.OpenStreetMapProvider(),
       style: 'bar',
@@ -320,7 +301,6 @@ export class TrendMapComponent implements OnInit {
   }
 
   locationSearched(place) {
-
     const locationInfo = place.location.label.split(', ');
     const topLevelLocation = locationInfo.slice(-1)[0];
     const inUsa = this.isInsideUsa(topLevelLocation);
@@ -344,20 +324,17 @@ export class TrendMapComponent implements OnInit {
             popupText = `<strong>${locationInfo[0]}, </strong>${locationInfo.slice(1, -1).join(', ')}`;
           }
           this.map.openPopup(popupText, [place.location.y, place.location.x]);
-          // matchedLayer.openPopup(); // This is for opening the normal click-popup
           setTimeout(() => {
             this.openStatusReport(matchedLayer);
           }, 250);
         });
       } else if (this.stateNameList.includes(secondLevelLocation)) {
-        // this.map.flyToBounds(place.location.bounds);
         matchedLayer = this.getLayerMatch(this.stateGeoJSON, place.location.x, place.location.y);
         this.map.flyToBounds(matchedLayer.getBounds().pad(0.5), { duration: 0.6 });
         this.map.once('zoomend', () => {
 
           const popupText = `<strong>${locationInfo[0]}`;
           this.map.openPopup(popupText, [place.location.y, place.location.x]);
-          // matchedLayer.openPopup(); // This is for opening the normal click-popup
           setTimeout(() => {
             this.openStatusReport(matchedLayer);
           }, 250);
@@ -576,7 +553,6 @@ export class TrendMapComponent implements OnInit {
       lineAtIndex,
       scales: {
         yAxes: [{
-          // type: 'time',
           ticks: {
             maxTicksLimit: 5,
             suggestedMin: 0,
@@ -616,11 +592,6 @@ export class TrendMapComponent implements OnInit {
         context.moveTo(lineLeftOffset, scale.top);
         context.lineTo(lineLeftOffset, scale.bottom);
         context.stroke();
-
-        /* write label */
-        // context.fillStyle = "black";
-        // context.textAlign = pointIndex < 2 ? 'left' : pointIndex > 2 ? 'right' : 'center';
-        // context.fillText('Now', lineLeftOffset, (scale.bottom - scale.top) / 3 + scale.top);
       },
 
       afterDatasetsDraw(chart, easing) {
@@ -634,7 +605,6 @@ export class TrendMapComponent implements OnInit {
   initMapData(countiesGeoJson, statesGeoJson, nationalGeoJson) {
 
     const countyStyle = {
-      // radius: 8,
       fillColor: 'transparent',
       color: 'hsl(180, 100%, 44%)', /* This is the cyan focus color */
       weight: 0, /* Weight gets toggled to focus a particular region */
@@ -669,7 +639,6 @@ export class TrendMapComponent implements OnInit {
         layer.bindPopup('', popupOptions);
         this.stateLayerLookup[feature.properties.FIPS] = layer;
       }
-      // dashArray: "10"
     };
     const nationalGeoJsonOptions: CustomGeoJSONOptions = {
       smoothFactor: 1,
@@ -679,7 +648,6 @@ export class TrendMapComponent implements OnInit {
         layer.bindPopup('', popupOptions);
         this.nationalLayerLookup[feature.properties.FIPS] = layer;
       }
-      // dashArray: "10"
     };
     this.countyGeoJSON = L.geoJSON(countiesGeoJson, countyGeoJsonOptions);
     this.stateGeoJSON = L.geoJSON(statesGeoJson, stateGeoJsonOptions);
@@ -692,7 +660,6 @@ export class TrendMapComponent implements OnInit {
 
     /* Add search text */
     const domElement = this.elementRef.nativeElement.querySelector('.search-text');
-    // this.elementRef.nativeElement.querySelector('.leaflet-control-geosearch').prepend(domElement);
     this.elementRef.nativeElement.querySelector('.geosearch-form').prepend(domElement);
 
     if (this.windowWidth < 451) {
@@ -740,7 +707,6 @@ export class TrendMapComponent implements OnInit {
       getStyle = this.getRecoveryStyleFunction;
       attributeLabel = 'Weeks case-free';
       rawCountId = 5;
-      // normalizedId = 4;
     } else {
       getStyle = this.getRateStyleFunction;
       attributeLabel = 'New (1 Week) ' + this.weekDefinitions.list[this.currentTimeStop.num];
@@ -750,16 +716,11 @@ export class TrendMapComponent implements OnInit {
 
     /* Update GeoJSON features */
     this.countyGeoJSON.eachLayer((layer) => {
-      // if(layer.feature.properties.NAME == 'feature 1') {
-      //   layer.setStyle({fillColor :'blue'})
-      // }
 
       /* Update popup */
       const countyInfo = this.countyCaseLookup[`${layer.feature.properties.FIPS}`];
-      // const stateInfo = this.stateCaseLookup[`${layer.feature.properties.FIPS}`];
       const countyName = countyInfo.name;
       const countyData = countyInfo.data[this.currentTimeStop.num];
-      // const stateData = stateInfo.data[this.currentTimeStop.num];
       const stateName = this.stateFipsLookup[layer.feature.properties.FIPS.substr(0, 2)].name;
       const isInvalidNebraska = this.isPanelContentValid({subtitle: stateName, timeStop: this.currentTimeStop.num});
       const attributeContent = 
@@ -787,7 +748,6 @@ export class TrendMapComponent implements OnInit {
         const nebraskaStateData = this.stateCaseLookup['31'].data[this.currentTimeStop.num];
         const currentTimeStopStateNormalized = nebraskaStateData[normalizedId];
         layer.setStyle(getStyle(currentTimeStopStateNormalized));
-        // layer.setStyle({ fillColor: "hsl(0, 0%, 85%)" });
       } else if (attribute === 5) {
         layer.setStyle(getStyle(countyData[rawCountId], countyData[cumulativeId]));
       } else {
@@ -816,7 +776,6 @@ export class TrendMapComponent implements OnInit {
 
   timeSliderChange() {
     this.changeDetector.detectChanges();
-    // ChangeDetectorRef.detectChanges();
     this.updateMapDisplay(this.choroplethDisplayAttribute);
     if (this.infoPanelOpen) {
       this.updatePanel(this.lastSelectedLayer);
@@ -825,7 +784,6 @@ export class TrendMapComponent implements OnInit {
 
   playAnimation(fps = 0.5) {
     const milliseconds = fps * 1000;
-    // this.closePanel();
     this.map.closePopup();
     this.animationPaused = false;
     const initialTimeStop = this.currentTimeStop.num === this.latestTimeStop.num ? 0 : this.currentTimeStop.num;
@@ -952,7 +910,6 @@ export class TrendMapComponent implements OnInit {
 
   getAccelerationStyleFunction(value) {
     switch (true) {
-      // case (value > 200): return { fillColor: "#5e0000" };
       case (value > 80): return { fillColor: 'hsl(28, 90%, 37%)' };
       case (value > 40): return { fillColor: 'hsl(28, 80%, 60%)' };
       case (value > 0): return { fillColor: 'hsl(28, 70%, 85%)' };
@@ -1079,14 +1036,6 @@ function getLoadingSplashTransition() {
 }
 function getNgIfAnimation() {
   return [
-    // transition(
-    //   ':leave',
-    //   [
-    //     style({ opacity: 1 }),
-    //     animate('0.25s ease-in',
-    //       style({ opacity: 0 }))
-    //   ]
-    // ),
     transition(
       ':enter',
       [
