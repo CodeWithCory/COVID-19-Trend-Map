@@ -9,19 +9,19 @@
       <div ngbDropdown placement="bottom-right">
         <button class="btn" id="about-dropdown" ngbDropdownToggle><span class="about-label">About </span><fa-icon [icon]="faBars"></fa-icon></button>
         <div ngbDropdownMenu aria-labelledby="about-dropdown">
-          <a href="/about" target="_blank" ngbDropdownItem class="about-action">About COVID-19-Watch <fa-icon [icon]="faExternalLinkAlt"></fa-icon></a>
+          <a href="#/about" target="_blank" ngbDropdownItem class="about-action">About COVID-19-Watch <fa-icon [icon]="faExternalLinkAlt"></fa-icon></a>
           <div ngbDropdownItem class="dropdown-item-separator"></div>
           <a ngbDropdownItem class="dropdown-layer-label">How-to:</a>
-          <a href="/about#find-and-share" target="_blank" ngbDropdownItem class="about-action">&nbsp; Find and Share</a>
-          <a href="/about#local-state-national" target="_blank" ngbDropdownItem class="about-action">&nbsp; Local, State, and National</a>
-          <a href="/about#change-over-time" target="_blank" ngbDropdownItem class="about-action">&nbsp; Change Over Time</a>
+          <a href="#/about#find-and-share" target="_blank" ngbDropdownItem class="about-action">&nbsp; Find and Share</a>
+          <a href="#/about#local-state-national" target="_blank" ngbDropdownItem class="about-action">&nbsp; Local, State, and National</a>
+          <a href="#/about#change-over-time" target="_blank" ngbDropdownItem class="about-action">&nbsp; Change Over Time</a>
           <div ngbDropdownItem class="dropdown-item-separator"></div>
           <a ngbDropdownItem class="dropdown-layer-label">About:</a>
-          <a href="/about#up-to-date-data" target="_blank" ngbDropdownItem class="about-action">&nbsp; The Data</a>
-          <a href="/about#key-technologies-services" target="_blank" ngbDropdownItem class="about-action">&nbsp; Key Technologies and Services</a>
-          <a href="/about#development-author" target="_blank" ngbDropdownItem class="about-action">&nbsp; App Development & Author</a>
+          <a href="#/about#up-to-date-data" target="_blank" ngbDropdownItem class="about-action">&nbsp; The Data</a>
+          <a href="#/about#key-technologies-services" target="_blank" ngbDropdownItem class="about-action">&nbsp; Key Technologies and Services</a>
+          <a href="#/about#development-author" target="_blank" ngbDropdownItem class="about-action">&nbsp; App Development & Author</a>
           <div ngbDropdownItem class="dropdown-item-separator"></div>
-          <a href="/about#disclaimer" target="_blank" ngbDropdownItem class="about-action">Disclaimer</a>
+          <a href="#/about#disclaimer" target="_blank" ngbDropdownItem class="about-action">Disclaimer</a>
         </div>
       </div>  
     </div>
@@ -165,11 +165,11 @@
         <div class="panel-subtitle">Share or Bookmark</div>
         <p>Direct URL to the status report for {{panelContent.title}}{{panelContent.subtitle ? ", " + panelContent.subtitle : ""}}:</p>
         <input readonly class="form-control status-report-link-text"
-        value="{{window.location.origin}}?fips={{panelContent.fips}}&name={{replaceSpaces(panelContent.title, '+')}}">
+        value="{{window.location.origin}}/#/?fips={{panelContent.fips}}&name={{replaceSpaces(panelContent.title, '+')}}">
       </div>
-      <button (click)="copyText(window.location.origin + '?fips=' + panelContent.fips + '&name=' + replaceSpaces(panelContent.title, '+'))" class="btn btn-secondary">Copy</button>
+      <button (click)="copyText(window.location.origin + '/#/?fips=' + panelContent.fips + '&name=' + replaceSpaces(panelContent.title, '+'))" class="btn btn-secondary">Copy</button>
       &nbsp;
-      <a href="{{window.location.origin}}?fips={{panelContent.fips}}&name={{replaceSpaces(panelContent.title, '+')}}" target="_blank"><button class="btn btn-secondary">Open (New Tab)</button></a>
+      <a href="{{window.location.origin}}/#/?fips={{panelContent.fips}}&name={{replaceSpaces(panelContent.title, '+')}}" target="_blank"><button class="btn btn-secondary">Open (New Tab)</button></a>
     </div>
     <div *ngIf="!isPanelContentValid({title: panelContent.title, subtitle: panelContent.subtitle, timeStop: currentTimeStop.num})"><em>Information is only available at the state level for this place and time.</em></div>
   </div>
