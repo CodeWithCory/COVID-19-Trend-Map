@@ -57,7 +57,7 @@
     <div class="status-report-floating-title"  
     [@ngIfAnimation] *ngIf="infoPanelCloseButton && statusReportElement.scrollTop > 75">
       <span><strong>{{panelContent.title}}</strong>{{panelContent.subtitle ? ", " + panelContent.subtitle : ""}}</span>&nbsp;
-      <div class="floating-sub"><em>{{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}} (Historic)</em></div>
+      <div class="floating-sub"><em>{{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}}</em></div>
     </div>
 
     <div class="close-panel-background" (click)="closePanel()" *ngIf="infoPanelCloseButton"><fa-icon [icon]="faCircle"></fa-icon></div>
@@ -68,7 +68,7 @@
     <h6>{{panelContent.subtitle}}</h6> <!-- State or blank -->
 
     <div *ngIf="isPanelContentValid({title: panelContent.title, subtitle: panelContent.subtitle, timeStop: currentTimeStop.num})">
-      <p *ngIf="weekDefinitions"><em>{{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}} (Historic)</em></p>
+      <p *ngIf="weekDefinitions"><em>{{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}}</em></p>
       <!-- <p>{{panelContent.date}}20</p> -->
 
       <div class="panel-separator"></div>
@@ -110,53 +110,56 @@
       </div>
 
       <div *ngIf="initialLoadingDone" class="panel-stats-section">
-        <div class="stat-title">New Cases That Week</div>&nbsp;<fa-icon
-          [icon]="faInfoCircle"
+        <div class="stat-title">New Cases</div> (1 Week) &nbsp;<span
+          class="fa-wrapper"
           popoverTitle="New Cases Per Week"
           ngbPopover="Number of new COVID-19 cases over 7 days from {{weekDefinitions.list[currentTimeStop.num-1]}} to {{weekDefinitions.list[currentTimeStop.num]}}"
           triggers="click"
           placement="auto"
           container="body"
-          ></fa-icon>
+        ><fa-icon [icon]="faInfo"></fa-icon></span>
         <div class="stat-data"><span class="primary-stat">{{panelContent.rate}}</span> ({{panelContent.rateNorm}} per 100k)</div>
-        <div class="stat-title">Acceleration</div> (2 Weeks) &nbsp;<fa-icon
-          [icon]="faInfoCircle"
+
+        <div class="stat-title">Acceleration</div> (2 Weeks) &nbsp;<span
+          class="fa-wrapper"
           popoverTitle="Acceleration"
-          ngbPopover="The number of more new cases this week compared to 2 weeks ago. Specifically, the difference in weekly rate between the weeks of {{weekDefinitions.list[currentTimeStop.num-2]}} and {{weekDefinitions.list[currentTimeStop.num]}}. Note: negative acceleration is deceleration."
+          ngbPopover="The difference in new cases compared to 2 weeks prior. Specifically, the change in weekly rate between the weeks of {{weekDefinitions.list[currentTimeStop.num-2]}} and {{weekDefinitions.list[currentTimeStop.num]}}. Negative acceleration means deceleration."
           triggers="click"
           placement="auto"
           container="body"
-          ></fa-icon>
+        ><fa-icon [icon]="faInfo"></fa-icon></span>
         <div class="stat-data"><span class="primary-stat">{{panelContent.acceleration}}</span> ({{panelContent.accelerationNorm}} per 100k)</div>
-        <div class="stat-title">Cumulative Cases</div> &nbsp;<fa-icon
-          [icon]="faInfoCircle"
+
+        <div class="stat-title">Cumulative Cases</div> &nbsp;<span
+          class="fa-wrapper"
           popoverTitle="Cumulative Cases"
-          ngbPopover="Total count of confirmed COVID-19 cases since the beginning"
+          ngbPopover="Total count of confirmed COVID-19 cases for the selected area as of {{weekDefinitions.list[currentTimeStop.num]}}"
           triggers="click"
           placement="auto"
           container="body"
-          ></fa-icon>
+        ><fa-icon [icon]="faInfo"></fa-icon></span>
         <div class="stat-data"><span class="primary-stat">{{panelContent.cumulative}}</span></div>
 
         <div class="panel-separator"></div>
 
-        <div class="stat-title">Deaths That Week</div> &nbsp;<fa-icon
-          [icon]="faInfoCircle"
+        <div class="stat-title">Deaths</div> (1 Week) &nbsp;<span
+          class="fa-wrapper"
           popoverTitle="Deaths Per Week"
           ngbPopover="Number of deaths due to COVID-19 cases over 7 days from {{weekDefinitions.list[currentTimeStop.num-1]}} to {{weekDefinitions.list[currentTimeStop.num]}}"
           triggers="click"
           placement="auto"
           container="body"
-          ></fa-icon>
+        ><fa-icon [icon]="faInfo"></fa-icon></span>
         <div class="stat-data"><span class="primary-stat">{{panelContent.deathsRate}}</span> ({{panelContent.deathsRateNorm}} per 100k)</div>
-        <div class="stat-title">Cumulative Deaths</div> &nbsp;<fa-icon
-          [icon]="faInfoCircle"
+
+        <div class="stat-title">Cumulative Deaths</div> &nbsp;<span
+          class="fa-wrapper"
           popoverTitle="Cumulative Deaths"
-          ngbPopover="Total count of deaths due to COVID-19 since the beginning"
+          ngbPopover="Total count of deaths confirmed due to COVID-19 for the selected area as of {{weekDefinitions.list[currentTimeStop.num]}}"
           triggers="click"
           placement="auto"
           container="body"
-          ></fa-icon>
+        ><fa-icon [icon]="faInfo"></fa-icon></span>
         <div class="stat-data"><span class="primary-stat">{{panelContent.deathsCumulative}}</span></div>
         <div class="panel-separator"></div>
       </div>

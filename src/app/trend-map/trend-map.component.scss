@@ -215,13 +215,23 @@
       .stat-data {
         margin-bottom: 8px;
       }
-      fa-icon {
-        color: rgb(210, 210, 210);
-        font-size: 18px;
+      .fa-wrapper {
+        display: inline-block;
+        height: 22px;
+        width: 22px;
+        color: rgb(170, 170, 170);
+        border: 2px solid rgb(170, 170, 170);
+        border-radius: 50%;
+        text-align: center;
+        line-height: 15px;
         cursor: pointer;
 
+        fa-icon {
+          font-size: 12px;
+        }
         &:hover {
-          color: rgb(100, 100, 100);
+          color: black;
+          border-color: black;
         }
       }
       .primary-stat {
