@@ -102,7 +102,7 @@ export class TrendMapComponent implements OnInit {
   stateNameList: string[] = [];
   legendContent: any = {
     colorSchemeData: this.getLegendColorSchemeRateData(),
-    layerDescription: 'New COVID-19 Cases (7-day total per 100k people)'
+    layerDescription: 'New COVID-19 Cases, 7-day total per 100k people'
   };
   legendColorSchemeData: any = this.getLegendColorSchemeRateData();
   legendLayerInfoOpen = true;
@@ -844,7 +844,7 @@ export class TrendMapComponent implements OnInit {
         this.layerSelection.faIcon = this.faVirus;
         this.updateMapDisplay(3);
         this.legendContent.colorSchemeData = this.getLegendColorSchemeRateData();
-        this.legendContent.layerDescription = 'New COVID-19 Cases (7-day total per 100k people)';
+        this.legendContent.layerDescription = 'New COVID-19 Cases, 7-day total per 100k people';
         break;
       case ('cca'):
         this.layerSelection.layer = 'cca';
@@ -852,7 +852,7 @@ export class TrendMapComponent implements OnInit {
         this.layerSelection.faIcon = this.faChartLine;
         this.updateMapDisplay(4);
         this.legendContent.colorSchemeData = this.getLegendColorSchemeAccelerationData();
-        this.legendContent.layerDescription = 'Change in new COVID-19 cases from 2 weeks prior (7-day total per 100k people); negative means deceleration';
+        this.legendContent.layerDescription = 'Change in new COVID-19 cases from 2 weeks prior, 7-day total per 100k people; negative means deceleration';
         break;
       case ('cdr'):
         // this.layerSelection.layer = "cdr";
@@ -860,7 +860,7 @@ export class TrendMapComponent implements OnInit {
         // this.layerSelection.faIcon = this.faVirus;
         // this.updateMapDisplay(4, "deaths");
         // this.legendContent.colorSchemeData = this.getLegendColorSchemeAccelerationData();
-        // this.legendContent.layerDescription = "Change in new COVID-19 cases from 2 weeks prior (7-day total per 100k people); negative means deceleration";
+        // this.legendContent.layerDescription = "Change in new COVID-19 cases from 2 weeks prior, 7-day total per 100k people; negative means deceleration";
         break;
       case ('cr'):
         this.layerSelection.layer = 'cr';
