@@ -91,7 +91,12 @@ export class TrendMapComponent implements OnInit {
   animationPaused = true;
 
   /* UI Text Content Control */
-  panelContent: any = {}; // panelContent: { title?: string, subtitle?: string, rate?: number, acceleration?: number, cumulative?: number, accWordMoreLess?: string, accWordAccelDecel?: string, accWordAndBut?: string, } = { };
+  panelContent: {
+    fips?: number; title?: string; subtitle?: string; rate?: number;
+    rateNorm?: string; acceleration?: string; accelerationNorm?: string; cumulative?: string;
+    deathsCumulative?: number; deathsRate?: number; deathsRateNorm?: number; date?: string;
+    summary?: string
+  } = {};
   weekDefinitions: { list: string[], lookup: { [timeStop_tN: string]: string } };
   stateFipsLookup: { [StateFips_00: string]: { name: string, abbr: string } } = this.getStateFipsLookup();
   stateNameList: string[] = [];
@@ -150,21 +155,32 @@ export class TrendMapComponent implements OnInit {
     }, 0);
   }
 
-  actOnUrlScheme() {
-    this.route.queryParams
-      .subscribe(params => {
-        if (params.fips) {
-          const selectedLayer = params.fips.length === 2 ? this.stateLayerLookup[params.fips] : params.fips.length === 1 ? this.nationalLayerLookup[params.fips] : this.countyLayerLookup[params.fips];
-          if (selectedLayer) {
-            if (params.fips.length === 1) {
-              this.map.flyTo([30, -98.5], 4, { duration: 0 });
-            } else {
-              this.map.fitBounds(selectedLayer.getBounds().pad(1));
-            }
-            this.openStatusReport(selectedLayer);
-          }
+  actOnUrlParameters() {
+    this.route.queryParams.subscribe(params => {
+      if (params.week) {
+        const timeStop = Number(params.week);
+        const maxTimeStop = this.weekDefinitions.list.length - 1;
+        if (Number.isInteger(timeStop) && timeStop >= 0 && timeStop <= maxTimeStop) {
+          this.currentTimeStop = {
+            name: 't' + timeStop,
+            num: timeStop
+          };
         }
-      });
+      }
+      if (params.fips) {
+        const selectedLocation = params.fips.length === 2 ? this.stateLayerLookup[params.fips] : params.fips.length === 1 ? this.nationalLayerLookup[params.fips] : this.countyLayerLookup[params.fips];
+        if (selectedLocation) {
+          if (params.fips.length === 1) {
+            this.map.flyTo([30, -98.5], 4, { duration: 0 });
+          } else {
+            this.map.fitBounds(selectedLocation.getBounds().pad(1));
+          }
+          this.openStatusReport(selectedLocation);
+        }
+      } else {
+        history.replaceState({}, document.title, this.makeParamsURL({ week: this.currentTimeStop.num }));
+      }
+    });
   }
 
   getData() {
@@ -197,7 +213,7 @@ export class TrendMapComponent implements OnInit {
 
       this.initMapData(response.county.geoJson, response.state.geoJson, response.national.geoJson);
 
-      this.actOnUrlScheme();
+      this.actOnUrlParameters();
 
       getDataObservable.unsubscribe();
 
@@ -365,7 +381,7 @@ export class TrendMapComponent implements OnInit {
     }, 200);
   }
 
-  isInsideUsa(topLevelLocation){
+  isInsideUsa(topLevelLocation) {
     return topLevelLocation.toLowerCase() === 'united states' || topLevelLocation.toLowerCase() === 'united states of america';
   }
 
@@ -393,14 +409,13 @@ export class TrendMapComponent implements OnInit {
     layer.bringToFront();
     layer.setStyle({ weight: 5, color: 'hsl(180, 100%, 44%)' });
 
-    const fips = layer.feature.properties.FIPS;
     /* Open the Status Report panel */
     if (this.infoPanelOpen) {
       this.closePanel();
       setTimeout(() => {
         this.updatePanel(layer);
         // this.noteStatusReportView(fips, `${this.panelContent.title}${this.panelContent.subtitle.length > 0 ? ', ' + this.panelContent.subtitle : ''}`);
-      }, 500);
+      }, 300);
     } else {
       this.updatePanel(layer);
       // this.noteStatusReportView(fips, `${this.panelContent.title}${this.panelContent.subtitle.length > 0 ? ', ' + this.panelContent.subtitle : ''}`);
@@ -468,6 +483,7 @@ export class TrendMapComponent implements OnInit {
     /* Used to reset the feature style when the Status Report is closed. */
     this.lastSelectedLayer = layer;
 
+    history.replaceState({}, document.title, this.makeParamsURL({ week: this.currentTimeStop.num, fips: this.panelContent.fips, name: this.panelContent.title }));
   }
 
   getStatusReportChartConfig(fips, attributeIndex) {
@@ -722,26 +738,24 @@ export class TrendMapComponent implements OnInit {
       const countyName = countyInfo.name;
       const countyData = countyInfo.data[this.currentTimeStop.num];
       const stateName = this.stateFipsLookup[layer.feature.properties.FIPS.substr(0, 2)].name;
-      const isInvalidNebraska = this.isPanelContentValid({subtitle: stateName, timeStop: this.currentTimeStop.num});
-      const attributeContent = 
+      const isInvalidNebraska = this.isPanelContentValid({ subtitle: stateName, timeStop: this.currentTimeStop.num });
+      const attributeContent =
         isInvalidNebraska ? `${attributeLabel}: <strong>${this.styleNum(countyData[rawCountId])}</strong> ${normalizedId ? '(' + this.styleNum(countyData[normalizedId]) + ' per 100k)' : ''}`
-        : "<em>Information is only available at the state level for this place and time.</em>"
-      ;
+          : "<em>Information is only available at the state level for this place and time.</em>"
+        ;
 
       const popupContent = `
       <div class="popup-place-title">
         <strong>${countyName}</strong>, ${stateName}
-      </div>`
-      + attributeContent
-      + `<p class="status-report-label"><em>See Status Report:</em></p>
+      </div>
+      ${attributeContent}
+      <p class="status-report-label"><em>See Status Report:</em></p>
       <div class="popup-status-report-btn-wrapper">
         <button ${isInvalidNebraska ? '' : 'disabled'} type="button" popup-fips="${layer.feature.properties.FIPS}" class="popup-status-report-btn-local btn btn-secondary btn-sm btn-light">Local</button>
         <button type="button" popup-fips="${layer.feature.properties.FIPS}" class="popup-status-report-btn-state btn btn-secondary btn-sm btn-light">State</button>
       <div>
       `;
       layer.setPopupContent(popupContent);
-      /* Invisible FIPS */
-      // <span class="popup-fips-label">[<span class="popup-fips">${layer.feature.properties.FIPS}</span>]</span>
 
       /* Update color */
       if (!isInvalidNebraska) {
@@ -753,9 +767,7 @@ export class TrendMapComponent implements OnInit {
       } else {
         layer.setStyle(getStyle(countyData[normalizedId]));
       }
-
     });
-
   }
 
   closePanel() {
@@ -771,6 +783,7 @@ export class TrendMapComponent implements OnInit {
       } else {
         this.lastSelectedLayer.setStyle({ weight: 0 });
       }
+      history.replaceState({}, document.title, this.makeParamsURL({ week: this.currentTimeStop.num }));
     }
   }
 
@@ -780,6 +793,11 @@ export class TrendMapComponent implements OnInit {
     if (this.infoPanelOpen) {
       this.updatePanel(this.lastSelectedLayer);
     }
+    history.replaceState({}, document.title, this.makeParamsURL({
+      week: this.currentTimeStop.num,
+      fips: this.infoPanelOpen ? this.panelContent.fips : null,
+      name: this.infoPanelOpen ? this.panelContent.title : null,
+    }));
   }
 
   playAnimation(fps = 0.5) {
@@ -813,13 +831,9 @@ export class TrendMapComponent implements OnInit {
     const targetTimeStop = this.currentTimeStop.num + step;
     const newTimeStop = targetTimeStop > this.latestTimeStop.num ? this.currentTimeStop.num
       : targetTimeStop < 0 ? this.currentTimeStop.num
-      : targetTimeStop;
+        : targetTimeStop;
     this.currentTimeStop = { name: `t${newTimeStop}`, num: newTimeStop };
     this.timeSliderChange();
-  }
-
-  replaceSpaces(string = '', symbol = '+') {
-    return string.replace(/ /g, symbol);
   }
 
   changeLayerSelection(layerCode) {
@@ -870,11 +884,23 @@ export class TrendMapComponent implements OnInit {
     }
   }
 
-  isPanelContentValid({title = "", subtitle = "", timeStop = this.currentTimeStop.num}) {
-    const invalidConditions = 
+  makeParamsURL({ fips = 0, week = -1, name = '' }): string {
+    return window.location.origin + '/' + this.makeHashUrlParams({fips, week, name});
+  }
+
+  makeHashUrlParams({ fips = 0, week = -1, name = '' }) {
+    let hashUrlPart = '#/?';
+    if (Number.isInteger(week) && week > 0) { hashUrlPart += `&week=${week}` }
+    if (fips) { hashUrlPart += `&fips=${fips}` }
+    if (name) { hashUrlPart += `&name=${name.replace(/ /g, '+')}` }
+    return hashUrlPart.replace('&', '');
+  }
+
+  isPanelContentValid({ title = "", subtitle = "", timeStop = this.currentTimeStop.num }) {
+    const invalidConditions =
       /* Local Nebraska after Jun 1, 2021 (state stopped reporting) */
       (subtitle === 'Nebraska' && timeStop > 67)
-    ;
+      ;
     return !invalidConditions
   }
 

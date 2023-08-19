@@ -168,11 +168,11 @@
         <div class="panel-subtitle">Share or Bookmark</div>
         <p>Direct URL to the status report for {{panelContent.title}}{{panelContent.subtitle ? ", " + panelContent.subtitle : ""}}:</p>
         <input readonly class="form-control status-report-link-text"
-        value="{{window.location.origin}}/#/?fips={{panelContent.fips}}&name={{replaceSpaces(panelContent.title, '+')}}">
+        value="{{ makeParamsURL({ week: currentTimeStop.num, fips: panelContent.fips, name: panelContent.title }) }}">
       </div>
-      <button (click)="copyText(window.location.origin + '/#/?fips=' + panelContent.fips + '&name=' + replaceSpaces(panelContent.title, '+'))" class="btn btn-secondary">Copy</button>
+      <button (click)="copyText( makeParamsURL({ week: currentTimeStop.num, fips: panelContent.fips, name: panelContent.title }) )" class="btn btn-secondary">Copy</button>
       &nbsp;
-      <a href="{{window.location.origin}}/#/?fips={{panelContent.fips}}&name={{replaceSpaces(panelContent.title, '+')}}" target="_blank"><button class="btn btn-secondary">Open (New Tab)</button></a>
+      <a href="{{ makeParamsURL({ week: currentTimeStop.num, fips: panelContent.fips, name: panelContent.title }) }}" target="_blank"><button class="btn btn-secondary">Open (New Tab)</button></a>
     </div>
     <div *ngIf="!isPanelContentValid({title: panelContent.title, subtitle: panelContent.subtitle, timeStop: currentTimeStop.num})"><em>Information is only available at the state level for this place and time.</em></div>
   </div>
