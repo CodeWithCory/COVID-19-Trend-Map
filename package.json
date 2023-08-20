@@ -5,11 +5,11 @@
     "ng": "ng",
     "start": "npx ng s",
     "build": "npx ng build --prod --base-href=''",
+    "build-pack": "npm run build && npm run pack",
+    "pack": "cp -r ./dist/covid19trendmap/* ./docs",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "heroku-postbuild": "ng build --configuration=production",
-    "deploy": "git add --all && git stash && git push && git checkout live && git pull origin main && git push && git checkout main && git stash pop"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
