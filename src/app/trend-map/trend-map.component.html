@@ -68,8 +68,7 @@
     <h6>{{panelContent.subtitle}}</h6> <!-- State or blank -->
 
     <div *ngIf="isPanelContentValid({title: panelContent.title, subtitle: panelContent.subtitle, timeStop: currentTimeStop.num})">
-      <p *ngIf="weekDefinitions"><em>{{formatHopkinsDate(weekDefinitions.list[currentTimeStop.num])}}</em></p>
-      <!-- <p>{{panelContent.date}}20</p> -->
+      <p><em>{{panelContent.date}}</em></p>
 
       <div class="panel-separator"></div>
 
@@ -166,7 +165,7 @@
 
       <div class="form-group" style="margin-top: 24px">
         <div class="panel-subtitle">Share or Bookmark</div>
-        <p>Direct URL to the status report for {{panelContent.title}}{{panelContent.subtitle ? ", " + panelContent.subtitle : ""}}:</p>
+        <p>Direct link to this status report ({{panelContent.title}}, {{panelContent.date}}):</p>
         <input readonly class="form-control status-report-link-text"
         value="{{ makeParamsURL({ week: currentTimeStop.num, fips: panelContent.fips, name: panelContent.title }) }}">
       </div>

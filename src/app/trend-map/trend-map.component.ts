@@ -456,7 +456,7 @@ export class TrendMapComponent implements OnInit {
     this.panelContent.deathsCumulative = this.styleNum(deathCumulative);
     this.panelContent.deathsRate = this.styleNum(deathRate);
     this.panelContent.deathsRateNorm = this.styleNum(deathRateNorm);
-    this.panelContent.date = this.weekDefinitions.lookup[`t${this.latestTimeStop.num + 1}`];
+    this.panelContent.date = this.formatHopkinsDate(this.weekDefinitions.list[this.currentTimeStop.num]);
     if (recoveryStreak === 0 && cumulative > 0) {
       this.panelContent.summary = `${this.panelContent.title} reported <strong>${this.panelContent.rate} new cases</strong> of COVID-19 over the selected week ${acceleration >= 0 || rate == 0 ? 'and' : 'but'} the number of ${rate > 0 ? '' : 'no'} new cases was <strong>${acceleration > 0 ? 'accelerating.' : acceleration == 0 ? 'steady.' : 'decelerating.'}</strong>`;
     } else if (recoveryStreak > 0 && cumulative > 0) {
