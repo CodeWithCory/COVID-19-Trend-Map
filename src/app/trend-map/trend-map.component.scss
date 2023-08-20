@@ -7,13 +7,6 @@
   height: 100vh;
   overflow: hidden;
   min-height: -webkit-fill-available; // Fix for weird iOS height issues
-  @media (max-width: 450px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100%;
-  }
 
   .loading-splash {
     position: absolute;
@@ -163,8 +156,8 @@
     opacity: 1;
     overflow-y: auto;
 
-    @media (max-width: 630px) {
-      height: calc( 100% - #{$header-height + 75px} );
+    @media (max-width: 630px) and (min-width: 450px) {
+      height: calc( 100% - #{$header-height + 150px} );
     }
     @media (max-width: 450px) {
       height: calc( 100% - #{$header-height + 16px} );
@@ -207,11 +200,12 @@
         display: inline-block;
         height: 22px;
         width: 22px;
-        color: rgb(170, 170, 170);
-        border: 2px solid rgb(170, 170, 170);
+        transform: translateY(-2px);
+        color: rgb(180, 180, 180);
+        border: 2px solid rgb(180, 180, 180);
         border-radius: 50%;
         text-align: center;
-        line-height: 15px;
+        line-height: 14px;
         cursor: pointer;
 
         fa-icon {
