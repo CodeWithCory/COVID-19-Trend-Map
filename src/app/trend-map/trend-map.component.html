@@ -170,7 +170,7 @@
         <input readonly class="form-control status-report-link-text"
         value="{{ makeParamsURL({ week: currentTimeStop.num, fips: panelContent.fips, name: panelContent.title }) }}">
       </div>
-      <button (click)="copyText( makeParamsURL({ week: currentTimeStop.num, fips: panelContent.fips, name: panelContent.title }) )" class="btn btn-secondary">Copy</button>
+      <button (click)="copyText( makeParamsURL({ week: currentTimeStop.num, fips: panelContent.fips, name: panelContent.title }) )" class="btn btn-secondary copy-button">Copy</button>
       &nbsp;
       <a href="{{ makeParamsURL({ week: currentTimeStop.num, fips: panelContent.fips, name: panelContent.title }) }}" target="_blank"><button class="btn btn-secondary">Open (New Tab)</button></a>
     </div>

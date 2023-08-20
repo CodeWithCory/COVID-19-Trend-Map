@@ -981,31 +981,18 @@ export class TrendMapComponent implements OnInit {
     ];
   }
 
-
-  copyText(text) {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-
-    // Avoid scrolling to bottom
-    textArea.style.top = '0';
-    textArea.style.left = '0';
-    textArea.style.position = 'fixed';
-
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
+  async copyText(text: string) {
     try {
-      const successful = document.execCommand('copy');
-      const msg = successful ? 'Copied!' : 'Auto-copy failed, please try copying from the text box.';
-      alert(msg);
+      await navigator.clipboard.writeText(text);
+      const copyButton = this.elementRef.nativeElement;
+      copyButton.querySelector('.copy-button').innerHTML = '&#x2713;';
+      setTimeout(() => {
+        copyButton.querySelector('.copy-button').innerText = 'Copy';
+      }, 1000);
     } catch (err) {
-      alert('Auto-copy failed, please try copying from the text box.');
+      console.error('Failed to copy text, error:', err);
     }
-
-    document.body.removeChild(textArea);
-
-  }
+  }  
 
   // noteStatusReportView(fips, label) {
   //   const url = '/api/note/statusReport';

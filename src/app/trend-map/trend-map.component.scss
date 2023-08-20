@@ -239,6 +239,10 @@
       }
     }
 
+    .copy-button {
+      width: 65px;
+    }
+
     @mixin close-panel-styles {
       position: fixed;
       top: $header-height + 7px;
