@@ -155,7 +155,7 @@ export class TrendMapComponent implements OnInit {
     }, 0);
   }
 
-  actOnUrlParameters() {
+  watchUrlParameters() {
     this.route.queryParams.subscribe(params => {
       if (params.week) {
         const timeStop = Number(params.week);
@@ -165,6 +165,7 @@ export class TrendMapComponent implements OnInit {
             name: 't' + timeStop,
             num: timeStop
           };
+          this.updateMapDisplay(this.choroplethDisplayAttribute);
         }
       }
       if (params.fips) {
@@ -213,7 +214,7 @@ export class TrendMapComponent implements OnInit {
 
       this.initMapData(response.county.geoJson, response.state.geoJson, response.national.geoJson);
 
-      this.actOnUrlParameters();
+      this.watchUrlParameters();
 
       getDataObservable.unsubscribe();
 
@@ -404,27 +405,26 @@ export class TrendMapComponent implements OnInit {
   }
 
   openStatusReport(layer) {
-
-    /* Update map feature */
-    layer.bringToFront();
-    layer.setStyle({ weight: 5, color: 'hsl(180, 100%, 44%)' });
-
     /* Open the Status Report panel */
     if (this.infoPanelOpen) {
       this.closePanel();
       setTimeout(() => {
+        layer.bringToFront();
+        layer.setStyle({ weight: 5, color: 'hsl(180, 100%, 44%)' }); /* Cyan */
+
         this.updatePanel(layer);
         // this.noteStatusReportView(fips, `${this.panelContent.title}${this.panelContent.subtitle.length > 0 ? ', ' + this.panelContent.subtitle : ''}`);
       }, 300);
     } else {
+      layer.bringToFront();
+      layer.setStyle({ weight: 5, color: 'hsl(180, 100%, 44%)' }); /* Cyan */
+
       this.updatePanel(layer);
       // this.noteStatusReportView(fips, `${this.panelContent.title}${this.panelContent.subtitle.length > 0 ? ', ' + this.panelContent.subtitle : ''}`);
     }
-
   }
 
   updatePanel(layer) {
-
     /* Update Status Report */
     const fips = layer.feature.properties.FIPS;
     const caseInfo = fips.length === 2 ? this.stateCaseLookup[fips] : fips.length === 1 ? this.nationalCaseLookup[fips] : this.countyCaseLookup[fips];
@@ -619,7 +619,6 @@ export class TrendMapComponent implements OnInit {
   }
 
   initMapData(countiesGeoJson, statesGeoJson, nationalGeoJson) {
-
     const countyStyle = {
       fillColor: 'transparent',
       color: 'hsl(180, 100%, 44%)', /* This is the cyan focus color */
@@ -633,12 +632,10 @@ export class TrendMapComponent implements OnInit {
       opacity: 1,
       fillOpacity: 0
     };
-
     const popupOptions: L.PopupOptions = {
       autoPanPaddingTopLeft: [5, 60],
       autoPanPaddingBottomRight: [50, 5]
     };
-
     const countyGeoJsonOptions: CustomGeoJSONOptions = {
       smoothFactor: 0.4,
       style: countyStyle,
@@ -815,6 +812,12 @@ export class TrendMapComponent implements OnInit {
         this.updatePanel(this.lastSelectedLayer);
       }
 
+      history.replaceState({}, document.title, this.makeParamsURL({
+        week: this.currentTimeStop.num,
+        fips: this.infoPanelOpen ? this.panelContent.fips : null,
+        name: this.infoPanelOpen ? this.panelContent.title : null,
+      }));
+
       /* Stop when the end is reached, may want to add a loop option later */
       if (this.currentTimeStop.num === this.latestTimeStop.num) {
         this.pauseAnimation();
@@ -885,12 +888,12 @@ export class TrendMapComponent implements OnInit {
   }
 
   makeParamsURL({ fips = 0, week = -1, name = '' }): string {
-    return window.location.origin + '/' + this.makeHashUrlParams({fips, week, name});
+    return window.location.origin + '/' + this.makeHashUrlParams({ fips, week, name });
   }
 
   makeHashUrlParams({ fips = 0, week = -1, name = '' }) {
     let hashUrlPart = '#/?';
-    if (Number.isInteger(week) && week > 0) { hashUrlPart += `&week=${week}` }
+    if (Number.isInteger(week) && week >= 0) { hashUrlPart += `&week=${week}` }
     if (fips) { hashUrlPart += `&fips=${fips}` }
     if (name) { hashUrlPart += `&name=${name.replace(/ /g, '+')}` }
     return hashUrlPart.replace('&', '');
