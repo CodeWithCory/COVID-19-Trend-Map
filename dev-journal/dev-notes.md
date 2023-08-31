@@ -1,40 +1,17 @@
 
-# Development Notes: COVID-19 Trend Map
-
-## Setup
-
-1. `npm i` install dependencies
-2. `npm install -g heroku` install the Heroku CLI
-   1. `heroku login`
-   2. `heroku git:remote -a covid-19-watch` Sets git remote `heroku` and allows other heroku commands to know which heroku app to work with
-   3. `heroku config:get DATABASE_URL -s >> .env` Update the gitignored `.env` file with the necessary config vars/keys
+# Development Notes: COVID-19-Watch.com
 
 ## Continuous Development
 
 Follow these steps to get the app up-and-running after a fresh clone
 
 1. `npm ci` Installs dependencies exactly according to the `package-lock.json`
-2. `ng build --watch` creates an app build in the `dist/` folder
-   - After source code changes simply refresh the page to see updates (thanks to the `--watch` flag)
-3. `heroku local` serves Angular's build folder (`dist/`) locally with Heroku connections (config vars, database, etc)
-   - Useful for full-stack testing
-   - The current app build is available on localhost port 5000 by default: http://localhost:5000
-
-Other commands:
-
-- `ng serve` is also useful to start the front-end in a local server
-  - Useful for front-end testing, but it will be cut off from the server
+2. `ng serve` opens the app locally
   - Port 4200 is default: http://localhost:4200, but can be changed like `ng s --port 4201`
-- `npm start` can be used as an alternative to `heroku local`, but heroku-specific tools will not be accessible
 
-## Analysis Documentation
+## Deployment
 
-County map layer with size reduction (7.8 MB > 2.2 MB) process:
-
-  1. Pull Esri's "USA Counties (Generalized)" from the Living Atlas
-  2. Fix the layer's geometry by importing & exporting from GRASS via QGIS, then running QGIS's "Fix geometries" tool
-  3. Dissolve based on FIPS to turn the resulting Polygon layer back into a MultiPolygon
-  4. Export as GeoJSON with only Name, FIPS, and POPULATION; set coordinate precision to 2
+1. `npm run build-pack` will update the `dist/` and `docs/` folders. The `docs/` folder is what GitHub Pages deploys once pushed to the `main` branch.
 
 ## Sources & References
 
@@ -44,9 +21,21 @@ County map layer with size reduction (7.8 MB > 2.2 MB) process:
 - [USA Counties Map Layer & Population](https://www.arcgis.com/home/item.html?id=7566e0221e5646f99ea249a197116605): Esri
 - [Florida Dashboard](https://floridacovidaction.com)
 
+### Analysis Documentation
+
+County map layer with size reduction (7.8 MB > 2.2 MB) process:
+
+  1. Pull Esri's "USA Counties (Generalized)" from the Living Atlas
+  2. Fix the layer's geometry by importing & exporting from GRASS via QGIS, then running QGIS's "Fix geometries" tool
+  3. Dissolve based on FIPS to turn the resulting Polygon layer back into a MultiPolygon
+  4. Export as GeoJSON with only Name, FIPS, and POPULATION; set coordinate precision to 2
+
+
 ## Timeline / TO DO
 
 ### 2023 Archival Project
+
+Goal is to have an LTR-style static-site to act as a historical record. - Done!
 
 - [x] Give the title of the app an HREF to the original URL
 - [x] Update the "Share or Bookmark" feature to include the date as well

@@ -241,7 +241,7 @@ export class TrendMapComponent implements OnInit {
     const CartoDB_PositronNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {});
     map.addLayer(CartoDB_PositronNoLabels);
     map.attributionControl.setPrefix('www.covid-19-watch.com');
-    map.attributionControl.addAttribution(`<a href="/about#up-to-date-data" target="_blank">Data Source: Johns Hopkins<span class="attribution-mobile-hide"> CSSE</span></a> | <a href="/about#disclaimer" target="_blank">Disclaimer</a><span class="attribution-mobile-hide"> | <a href="/about#development-author" target="_blank">Author: Cory Leigh Rahman</a></span>`);
+    map.attributionControl.addAttribution(`<a href="/about#best-available-data" target="_blank">Data Source: Johns Hopkins<span class="attribution-mobile-hide"> CSSE</span></a> | <a href="/about#disclaimer" target="_blank">Disclaimer</a><span class="attribution-mobile-hide"> | <a href="/about#development-author" target="_blank">Author: Cory Leigh Rahman</a></span>`);
 
     const Stamen_TonerHybrid_Options: CustomTileLayerOptions = {
       subdomains: 'abcd',

@@ -38,7 +38,6 @@
     "express": "^4.17.1",
     "express-sanitizer": "^1.0.5",
     "got": "^11.3.0",
-    "heroku-ssl-redirect": "^0.1.1",
     "input-range-scss": "^1.5.2",
     "leaflet": "^1.6.0",
     "leaflet-geometryutil": "^0.9.3",

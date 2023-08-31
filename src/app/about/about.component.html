@@ -15,7 +15,7 @@
           <li><a href="#/about#find-and-share" class="text-link strong" (click)="scrollToFragment('find-and-share')">Find and share</a> - Quickly search anywhere in the nation for COVID-19 Status Reports</li>
           <li><a href="#/about#local-state-national" class="text-link strong">Local, state, and national</a> - Explore data and trends at local, state, and national levels</li>
           <li><a href="#/about#change-over-time" class="text-link strong">Change over time</a> - Watch change-over-time animation in the map and graph</li>
-          <li><a href="#/about#up-to-date-data" class="text-link strong">Up-to-date data</a> - While COVID-19-Watch.com was active, users could see the latest data automatically updated daily from Johns Hopkins University</li>
+          <li><a href="#/about#best-available-data" class="text-link strong">Best available data</a> - While COVID-19-Watch.com was active, users could see the latest data automatically updated daily from Johns Hopkins University</li>
         </ul>
 
         <p><strong>Access:</strong></p>
@@ -59,18 +59,18 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4 display-image">
+      <div class="col-md-4 display-image" style="margin-right:60px">
         <a href="#/"><img src="assets/img/function-find-and-share-1.jpg" class="img-fluid"></a>
-        <p>Use the search bar or click the map to find a COVID-19 Status Report</p>
+        <!-- <p style="font-size: 24px">1</p> -->
       </div>
       <div class="col-md-4 display-image">
         <a href="#/?fips=51059&name=Fairfax+County"><img src="assets/img/function-find-and-share-2.jpg" class="img-fluid"></a>
-        <p>Status Reports are catered to specific regions</p>
+        <!-- <p style="font-size: 24px">2</p> -->
       </div>
-      <div class="col-md-4 display-image">
+      <!-- <div class="col-md-4 display-image">
         <a href="#/?fips=51059&name=Fairfax+County"><img src="assets/img/function-find-and-share-3.jpg" class="img-fluid"></a>
-        <p>You can send a direct link to a particular Status Report using the URL at the bottom</p>
-      </div>
+        <p style="font-size: 20px">3</p>
+      </div> -->
     </div>
 
     <div class="row">
@@ -119,14 +119,14 @@
       </div>
     </div>
 
-    <div id="up-to-date-data" class="row">
+    <div id="best-available-data" class="row">
       <div class="col-sm">
-        <h2>Up-to-Date Data</h2>
+        <h2>Best Available Data</h2>
         <p>All information is calculated from the <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank" class="text-link">COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a>. Read more about JHU CSSE's data process in their <a href="https://github.com/CSSEGISandData/COVID-19/blob/master/README.md" target="_target" class="text-link">README</a>. This Johns Hopkins data service is <a href="https://ourworldindata.org/covid-sources-comparison" target="_blank" class="text-link">highly regarded as one of the best sources of COVID-19 data</a>.</p>
         <p>Data is available from February 2020 to March 2022, the data was updated daily during this time.</p>
         <p>Data lifecycle:</p>
         <ol>
-          <li>Raw COVID-19 data was automatically pulled from Johns Hopkins every morning around 3 a.m. by <a href="https://github.com/codewithcory/COVID-19-Trend-Map/blob/main/server/Diego-DataBroker.bot.js" target="_blank" class="text-link">Diego the Data Broker</a>, a web robot developed to support COVID-19-Watch.</li>
+          <li>Raw COVID-19 data was automatically pulled from Johns Hopkins every morning around 3 a.m. by <a href="https://github.com/codewithcory/COVID-19-Trend-Map/blob/main/server/Diego-DataBroker.bot.js" target="_blank" class="text-link">Diego the Data Broker</a>, a web robot developed to support COVID-19-Watch. The name is just fo fun, the Diego process can be described as a extract-transform-load (ETL) chron job.</li>
           <li>Diego calculates metrics such as case rate and acceleration for every county, state, and the nation for every week since the data begins</li>
           <li>This data is added to a Data Package alongside county, state, and national GeoJSON map files and added to the database</li>
           <li>When someone visits COVID-19-Watch online, Diego took the morning's latest Data Package and gave it to the app for display in the map and Status Reports</li>
@@ -139,15 +139,14 @@
         <h2 id="key-technologies-services">Key Technologies and Services</h2>
         <p>The following technologies and services were instrumental in the development of COVID-19-Watch. This is the "tech stack".</p>
         <ul>
+          <li><a href="https://angular.io" target="_blank" class="text-link">Angular</a> - Front end JavaScript framework</li>
+          <li><a href="https://nodejs.org/" target="_blank" class="text-link">Node</a>, <a href="https://expressjs.com" target="_blank" class="text-link">Express</a> - Back end server technology</li>
+          <li><a href="https://www.postgresql.org" target="_blank" class="text-link">PostgreSQL</a> - Database</li>
+          <li><a href="https://leafletjs.com" target="_blank" class="text-link">Leaflet</a> - Dynamic web map</li>
           <li><a href="https://github.com/CSSEGISandData/COVID-19" target="_blank" class="text-link">COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a> - Live COVID-19 data</li>
           <li><a href="https://livingatlas.arcgis.com/en/" target="_blank" class="text-link">Esri Living Atlas</a> - Population numbers and county, state, and national map data</li>
           <li><a href="https://www.openstreetmap.org/" target="_blank" class="text-link">OpenStreetMap</a> - Location search (geocoding service)</li>
-          <li><a href="https://leafletjs.com" target="_blank" class="text-link">Leaflet</a> - Dynamic web map</li>
           <li><a href="https://getbootstrap.com" target="_blank" class="text-link">Bootstrap</a>, <a href="https://fontawesome.com" target="_blank" class="text-link">Font Awesome</a> - User interface components</li>
-          <li><a href="https://angular.io" target="_blank" class="text-link">Angular</a> - JavaScript framework</li>
-          <li><a href="https://nodejs.org/" target="_blank" class="text-link">Node</a>, <a href="https://expressjs.com" target="_blank" class="text-link">Express</a> - web server</li>
-          <li><a href="https://www.postgresql.org" target="_blank" class="text-link">PostgreSQL</a> - Database</li>
-          <li><a href="https://www.heroku.com" target="_blank" class="text-link">Heroku</a> - Development platform, deployment, and hosting</li>
         </ul>
       </div>
     </div>
@@ -178,7 +177,7 @@
       <div class="col-sm">
         <br><br><br>
         <h2 id="disclaimer">Disclaimer</h2>
-        <p>The information provided by the app developers and contributors (including but not limited to <a href="https://github.com/codewithcory/COVID-19-Trend-Map/contributors" target="_blank" class="text-link">GitHub contributors</a>, hereafter “we,” “us” or “our”) on COVID-19-Watch (located at <em>www.covid-19-watch.com</em> and <em>covid-19-watch.herokuapp.com</em>, hereafter the “Site”) is for general informational purposes only. All information on the Site is provided in good faith, however we make no representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability or completeness of any information on the Site. It is not, and is not intended, for the use in the diagnosis of disease or other conditions, or in the cure, mitigation, treatment, or prevention of disease, in humans or other animals. UNDER NO CIRCUMSTANCE SHALL WE HAVE ANY LIABILITY TO YOU FOR ANY LOSS OR DAMAGE OF ANY KIND INCURRED AS A RESULT OF THE USE OF THE SITE OR RELIANCE ON ANY INFORMATION PROVIDED ON THE SITE. YOUR USE OF THE SITE AND YOUR RELIANCE ON ANY INFORMATION ON THE SITE IS SOLELY AT YOUR OWN RISK.</p>
+        <p>The information provided by the app developers and contributors (including but not limited to <a href="https://github.com/codewithcory/COVID-19-Trend-Map/contributors" target="_blank" class="text-link">GitHub contributors</a>, hereafter “we,” “us” or “our”) on COVID-19-Watch (located at <em>www.covid-19-watch.com</em>, hereafter the “Site”) is for general informational purposes only. All information on the Site is provided in good faith, however we make no representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability or completeness of any information on the Site. It is not, and is not intended, for the use in the diagnosis of disease or other conditions, or in the cure, mitigation, treatment, or prevention of disease, in humans or other animals. UNDER NO CIRCUMSTANCE SHALL WE HAVE ANY LIABILITY TO YOU FOR ANY LOSS OR DAMAGE OF ANY KIND INCURRED AS A RESULT OF THE USE OF THE SITE OR RELIANCE ON ANY INFORMATION PROVIDED ON THE SITE. YOUR USE OF THE SITE AND YOUR RELIANCE ON ANY INFORMATION ON THE SITE IS SOLELY AT YOUR OWN RISK.</p>
       </div>
     </div>
 
